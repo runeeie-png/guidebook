@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Villaen i Alsvik — Guidebook & informasjon</title>
+<meta name="description" content="Et stille hus ved fjorden, i hjertet av Ryfylke. Guidebook og praktisk informasjon for gjester." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --stone-900:#1c1f1d; --stone-800:#2b302c; --stone-700:#3d433d;
+    --moss:#5b6b54; --moss-deep:#404c3c; --fog:#d7d9d2;
+    --linen:#ece9e1; --linen-warm:#f4f1e8; --paper:#faf8f2;
+    --rust:#a8623c; --gold:#c9a25a; --muted:#6f746b;
+    --serif:"Fraunces",Georgia,serif; --sans:"Jost",system-ui,sans-serif;
+    --maxw:1200px; --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--stone-900);font-family:var(--sans);
+    font-weight:300;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--moss);color:var(--paper)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:400;line-height:1.12;letter-spacing:-.01em}
+  .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{font-size:12px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--moss)}
+  .hidden{display:none!important}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  .site-header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;
+    justify-content:space-between;padding:24px 40px;transition:all .5s var(--ease);
+    mix-blend-mode:difference;color:#fff}
+  .site-header.scrolled{mix-blend-mode:normal;color:var(--stone-900);
+    background:rgba(250,248,242,.85);backdrop-filter:blur(14px);padding:16px 40px;
+    border-bottom:1px solid rgba(0,0,0,.06)}
+  .brand{font-family:var(--serif);font-size:20px;letter-spacing:.02em;cursor:pointer}
+  .brand small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.34em;
+    text-transform:uppercase;opacity:.7;margin-top:3px}
+  .nav{display:flex;gap:38px;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+  .nav a{position:relative;padding-bottom:3px;cursor:pointer}
+  .nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+    background:currentColor;transition:width .4s var(--ease)}
+  .nav a:hover::after{width:100%}
+
+  .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden;color:#fff}
+  .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;
+    transform:scale(1.08);animation:zoom 22s ease-out forwards}
+  @keyframes zoom{to{transform:scale(1)}}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,
+    rgba(20,24,20,.32)0%,rgba(20,24,20,.1)38%,rgba(20,24,20,.78)100%)}
+  .hero-inner{position:relative;z-index:2;width:100%;max-width:var(--maxw);margin:0 auto;padding:0 40px 88px}
+  .hero h1{font-size:clamp(3rem,8.5vw,7.4rem);font-weight:300;max-width:14ch;
+    text-shadow:0 2px 30px rgba(0,0,0,.3)}
+  .hero .lede{margin-top:26px;max-width:46ch;font-size:19px;opacity:.94}
+  .hero-meta{margin-top:40px;display:flex;gap:40px;font-size:13px;letter-spacing:.18em;
+    text-transform:uppercase;opacity:.9;flex-wrap:wrap}
+  .hero-meta span{border-left:1px solid rgba(255,255,255,.4);padding-left:16px}
+  .scrollcue{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:3;
+    width:1px;height:54px;background:rgba(255,255,255,.6);overflow:hidden}
+  .scrollcue::after{content:"";position:absolute;inset:0;background:#fff;
+    animation:cue 2.4s var(--ease) infinite}
+  @keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+
+  section{position:relative}
+  .section-pad{padding:130px 0}
+  .section-head{max-width:760px;margin-bottom:70px}
+  .section-head h2{font-size:clamp(2.1rem,4.6vw,3.6rem);margin-top:18px}
+  .section-head p{margin-top:22px;color:var(--muted);font-size:18px;max-width:58ch}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+  .split-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--fog)}
+  .split-media img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+  .split-media:hover img{transform:scale(1.05)}
+  .frame-tag{position:absolute;left:22px;bottom:22px;color:#fff;font-size:12px;
+    letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+  .split-text h2{font-size:clamp(2rem,4vw,3.1rem)}
+  .split-text p{margin-top:24px;color:var(--muted);font-size:18px}
+  .facts{margin-top:40px;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+    background:rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.08)}
+  .fact{background:var(--paper);padding:22px 24px}
+  .fact .k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--moss)}
+  .fact .v{font-family:var(--serif);font-size:21px;margin-top:6px}
+
+  .guide-band{background:var(--stone-900);color:var(--linen)}
+  .guide-band .eyebrow{color:var(--gold)}
+  .guide-band .section-head p{color:rgba(236,233,225,.7)}
+  .guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
+  .guide-card{background:var(--stone-900);padding:46px 40px;min-height:260px;display:flex;
+    flex-direction:column;justify-content:space-between;transition:background .5s var(--ease);cursor:pointer}
+  .guide-card:hover{background:var(--moss-deep)}
+  .guide-card svg{width:30px;height:30px;stroke:var(--gold);stroke-width:1.4;fill:none}
+  .guide-card h3{font-size:1.7rem;margin-top:30px}
+  .guide-card p{margin-top:14px;font-size:15px;color:rgba(236,233,225,.66)}
+  .gc-go{margin-top:28px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--gold);display:flex;align-items:center;gap:10px}
+  .gc-go::after{content:"→";transition:transform .4s var(--ease)}
+  .guide-card:hover .gc-go::after{transform:translateX(8px)}
+
+  .manual-page{padding:140px 0 130px;display:none}
+  .manual-page.active{display:block}
+  .back-link{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);
+    display:inline-flex;gap:10px;margin-bottom:50px;cursor:pointer;background:none;border:none;
+    font-family:var(--sans)}
+  .manual-page h1{font-size:clamp(2.4rem,6vw,4.4rem);max-width:16ch}
+  .manual-page .lede{margin-top:22px;color:var(--muted);font-size:19px;max-width:54ch}
+  .manual-body{margin-top:70px;max-width:760px}
+  .m-section{padding:44px 0;border-top:1px solid rgba(0,0,0,.1)}
+  .m-section:first-child{border-top:none;padding-top:0}
+  .m-section h3{font-size:1.7rem;margin-bottom:20px}
+  .m-section p{color:var(--stone-700);font-size:18px;white-space:pre-line}
+  .m-video{margin:26px 0 6px;width:100%;aspect-ratio:16/9;background:var(--stone-900);
+    border-radius:2px;overflow:hidden}
+  .m-video iframe,.m-video video{width:100%;height:100%;border:0;object-fit:cover}
+  .m-check{list-style:none;margin-top:8px}
+  .m-check li{padding:16px 0 16px 38px;position:relative;
+    border-bottom:1px solid rgba(0,0,0,.08);font-size:17px}
+  .m-check li::before{content:"";position:absolute;left:0;top:19px;width:18px;height:18px;
+    border:1.5px solid var(--moss);border-radius:50%}
+  .m-check li::after{content:"";position:absolute;left:6px;top:23px;width:7px;height:4px;
+    border-left:1.5px solid var(--moss);border-bottom:1.5px solid var(--moss);transform:rotate(-45deg)}
+
+  .contact{background:var(--linen-warm)}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  .contact h2{font-size:clamp(2.2rem,5vw,3.8rem)}
+  .contact p{margin-top:22px;color:var(--muted);font-size:18px}
+  .contact-card{background:var(--paper);border:1px solid rgba(0,0,0,.08);padding:50px}
+  .contact-card .row{padding:20px 0;border-bottom:1px solid rgba(0,0,0,.08)}
+  .contact-card .row:last-child{border-bottom:none}
+  .contact-card .k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--moss)}
+  .contact-card .v{font-family:var(--serif);font-size:22px;margin-top:6px}
+
+  footer{background:var(--stone-900);color:rgba(236,233,225,.7);padding:60px 0;font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+  footer .brand{color:var(--linen)}
+  .admin-link{letter-spacing:.16em;text-transform:uppercase;font-size:12px;cursor:pointer;
+    background:none;border:none;color:rgba(236,233,225,.7);font-family:var(--sans)}
+
+  .admin-overlay{position:fixed;inset:0;z-index:100;background:var(--linen);overflow-y:auto;display:none}
+  .admin-overlay.active{display:block}
+  .admin-top{display:flex;justify-content:space-between;align-items:center;padding:20px 32px;
+    background:var(--paper);border-bottom:1px solid rgba(0,0,0,.1);position:sticky;top:0;z-index:10;
+    flex-wrap:wrap;gap:12px}
+  .admin-main{max-width:1000px;margin:0 auto;padding:40px 32px 120px}
+  .admin-login{min-height:100vh;display:grid;place-items:center;background:var(--stone-900);
+    color:var(--linen);padding:24px}
+  .admin-login .box{width:100%;max-width:380px;text-align:center}
+  .admin-login h2{font-size:2rem;margin:16px 0 8px}
+  .admin-login p{color:rgba(236,233,225,.6);margin-bottom:30px;font-size:15px}
+  .field{margin-bottom:16px;text-align:left}
+  .field label{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--moss);margin-bottom:8px}
+  .input,.textarea,.select{width:100%;background:var(--paper);border:1px solid rgba(0,0,0,.16);
+    color:var(--stone-900);padding:13px 15px;font-family:var(--sans);font-size:16px;
+    border-radius:2px;outline:none;transition:border-color .3s}
+  .input:focus,.textarea:focus,.select:focus{border-color:var(--moss)}
+  .textarea{min-height:120px;resize:vertical;line-height:1.6}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--moss);
+    color:var(--paper);border:none;padding:14px 28px;font-family:var(--sans);font-size:13px;
+    font-weight:500;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:2px;
+    transition:background .3s var(--ease)}
+  .btn:hover{background:var(--moss-deep)}
+  .btn.ghost{background:transparent;color:var(--stone-900);border:1px solid rgba(0,0,0,.22)}
+  .btn.ghost:hover{background:rgba(0,0,0,.05)}
+  .btn.danger{background:transparent;color:var(--rust);border:1px solid rgba(168,98,60,.4)}
+  .btn.danger:hover{background:rgba(168,98,60,.08)}
+  .btn.small{padding:9px 16px;font-size:11px}
+  .admin-title{font-family:var(--serif);font-size:1.8rem;margin:46px 0 8px}
+  .admin-title:first-child{margin-top:0}
+  .admin-hint{color:var(--muted);font-size:15px;margin-bottom:24px}
+  .card{background:var(--paper);border:1px solid rgba(0,0,0,.1);border-radius:3px;
+    padding:26px;margin-bottom:16px}
+  .card-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:6px}
+  .card-head h3{font-size:1.35rem}
+  .card-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .block-ed{border:1px solid rgba(0,0,0,.12);border-radius:3px;padding:18px;margin-bottom:12px;
+    background:var(--linen-warm)}
+  .block-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .block-type{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--moss)}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--stone-900);
+    color:var(--linen);padding:14px 26px;border-radius:3px;font-size:14px;z-index:200;
+    box-shadow:0 10px 40px rgba(0,0,0,.3);max-width:90vw;text-align:center}
+  .save-bar{background:var(--gold);color:var(--stone-900);padding:16px 32px;text-align:center;
+    font-size:14px;line-height:1.5}
+  .save-bar b{font-weight:500}
+
+  @media(max-width:900px){
+    .site-header,.site-header.scrolled{padding:16px 20px}
+    .nav{display:none}
+    .hero-inner{padding:0 22px 60px}
+    .hero-meta{flex-direction:column;gap:14px}
+    .split,.contact-grid{grid-template-columns:1fr;gap:42px}
+    .guide-grid{grid-template-columns:1fr}
+    .section-pad{padding:80px 0}
+    .wrap{padding:0 20px}
+    .grid-2{grid-template-columns:1fr}
+    .admin-main,.admin-top{padding-left:18px;padding-right:18px}
+  }
+</style>
+</head>
+<body>
+
+<div id="site">
+  <header class="site-header" id="hdr">
+    <div class="brand" onclick="goHome()">Villaen<small>i Alsvik · Ryfylke</small></div>
+    <nav class="nav">
+      <a onclick="goHome();scrollToId('huset')">Huset</a>
+      <a onclick="goHome();scrollToId('guidebook')">Guidebook</a>
+      <a onclick="goHome();scrollToId('omradet')">Området</a>
+      <a onclick="goHome();scrollToId('kontakt')">Kontakt</a>
+    </nav>
+  </header>
+
+  <div id="home">
+    <section class="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-inner">
+        <div class="eyebrow reveal" style="color:rgba(255,255,255,.85)">Feriebolig til leie · Ryfylke</div>
+        <h1 class="reveal" id="heroName">Villaen i Alsvik</h1>
+        <p class="lede reveal" id="heroTag"></p>
+        <div class="hero-meta reveal" id="heroMeta"></div>
+      </div>
+      <div class="scrollcue"></div>
+    </section>
+
+    <section id="huset" class="section-pad">
+      <div class="wrap">
+        <div class="split">
+          <div class="split-media reveal">
+            <img id="houseImg" alt="Villaen i Alsvik" />
+            <span class="frame-tag">Villaen — Alsvik</span>
+          </div>
+          <div class="split-text">
+            <div class="eyebrow reveal">Velkommen</div>
+            <h2 class="reveal" style="margin-top:16px">Et hus som puster med fjorden</h2>
+            <p class="reveal" id="introText"></p>
+            <div class="facts reveal" id="factsBox"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guidebook" class="guide-band section-pad">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow reveal">Guidebook</div>
+          <h2 class="reveal">Alt du trenger for et godt opphold</h2>
+          <p class="reveal">Korte, tydelige veiledninger med tekst og video — fra ankomst til avreise. Trykk på et tema for å lese mer.</p>
+        </div>
+        <div class="guide-grid" id="guideGrid"></div>
+      </div>
+    </section>
+
+    <section id="omradet" class="section-pad">
+      <div class="wrap">
+        <div class="split">
+          <div class="split-text">
+            <div class="eyebrow reveal">Området</div>
+            <h2 class="reveal" style="margin-top:16px">Ryfylke rett utenfor døren</h2>
+            <p class="reveal">Fra Alsvik natursenter med stier og badeplasser, til Preikestolen og fjordcruise på Lysefjorden — det meste ligger innen rekkevidde for en dagstur. Du finner detaljerte tips i guidebook-delen.</p>
+            <button class="btn reveal" style="margin-top:34px" onclick="openManual('omradet')">Se opplevelser</button>
+          </div>
+          <div class="split-media reveal">
+            <img id="areaImg" alt="Ryfylke landskap" />
+            <span class="frame-tag">Lysefjorden · Ryfylke</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="contact section-pad">
+      <div class="wrap">
+        <div class="contact-grid">
+          <div>
+            <div class="eyebrow reveal">Kontakt</div>
+            <h2 class="reveal" style="margin-top:16px">Er det noe du lurer på?</h2>
+            <p class="reveal">Ta gjerne kontakt før eller under oppholdet. Vi svarer så raskt vi kan, og hjelper gjerne med tips til turer og praktiske ting.</p>
+          </div>
+          <div class="contact-card reveal" id="contactCard"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <main class="manual-page" id="manualPage">
+    <div class="wrap">
+      <button class="back-link" onclick="goHome()">← Tilbake til guidebook</button>
+      <div class="eyebrow">Guidebook</div>
+      <h1 id="mTitle" style="margin-top:16px"></h1>
+      <p class="lede" id="mSummary"></p>
+      <div class="manual-body" id="mBody"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="brand">Villaen i Alsvik</div>
+      <div id="footYear"></div>
+      <button class="admin-link" onclick="openAdmin()">Admin</button>
+    </div>
+  </footer>
+</div>
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-login" id="adminLogin">
+    <div class="box">
+      <div class="eyebrow" style="color:var(--gold)">Villaen i Alsvik</div>
+      <h2>Administrasjon</h2>
+      <p>Logg inn for å redigere guidebook og veiledninger.</p>
+      <div class="field">
+        <label>Passord</label>
+        <input class="input" type="password" id="pwInput" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')tryLogin()" />
+      </div>
+      <div id="pwErr" style="color:#e8a;font-size:14px;margin-bottom:14px;display:none">Feil passord. Prøv igjen.</div>
+      <button class="btn" style="width:100%" onclick="tryLogin()">Logg inn</button>
+      <button class="admin-link" style="color:rgba(236,233,225,.5);margin-top:20px" onclick="closeAdmin()">← Tilbake til siden</button>
+    </div>
+  </div>
+
+  <div id="adminEditor" class="hidden">
+    <div class="save-bar">
+      Endringer lagres ikke automatisk. Når du er ferdig: trykk <b>Last ned data.js</b>,
+      og legg den nye filen opp på GitHub (erstatt den gamle). Siden oppdateres på ~30 sekunder.
+    </div>
+    <div class="admin-top">
+      <div class="brand" style="font-size:17px">Villaen · Admin</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost small" onclick="closeAdmin()">Se nettside</button>
+        <button class="btn small" onclick="downloadData()">⬇ Last ned data.js</button>
+      </div>
+    </div>
+    <div class="admin-main" id="adminBody"></div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+
+var DEFAULT_DATA = {
+  house:{name:"Villaen i Alsvik",tagline:"Et stille hus ved fjorden, i hjertet av Ryfylke",
+    intro:"",checkIn:"",checkOut:"",contactName:"",contactPhone:"",contactEmail:"",
+    heroImage:"",houseImage:"",areaImage:""},
+  manuals:[]
+};
+var D = (window.VILLA_DATA && typeof window.VILLA_DATA==="object") ? window.VILLA_DATA : DEFAULT_DATA;
+if(!D.house || typeof D.house!=="object") D.house = DEFAULT_DATA.house;
+if(!Array.isArray(D.manuals)) D.manuals = [];
+
+var ADMIN_PASSWORD = "villaen2024"; // BYTT dette til ditt eget passord
+
+var ICONS = {
+  key:'<circle cx="8" cy="8" r="5"/><path d="M11.5 11.5 21 21M16 16l3-3M19 19l2-2"/>',
+  wifi:'<path d="M2 8.5a16 16 0 0 1 20 0"/><path d="M5 12a11 11 0 0 1 14 0"/><path d="M8.5 15.5a6 6 0 0 1 7 0"/><circle cx="12" cy="19" r="0.6"/>',
+  flame:'<path d="M12 3c1 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1.5.6-2.5 1.3-3.3C9 9 9.5 11 11 11c1.2 0 1.4-1.7.4-3.3C10.5 6 12 4 12 3Z"/>',
+  thermometer:'<path d="M12 3.5a2 2 0 0 1 2 2v8.2a4 4 0 1 1-4 0V5.5a2 2 0 0 1 2-2Z"/><path d="M12 14V8"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/>',
+  door:'<path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><path d="M4 21h16"/><circle cx="14.5" cy="12" r="0.7"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 19a2 2 0 0 1 2-2h13"/>'
+};
+function iconSvg(n){return '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[n]||ICONS.book)+'</svg>';}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+function renderHome(){
+  try{
+    var h=D.house||{};
+    var hb=document.getElementById("heroBg");
+    if(h.heroImage) hb.style.backgroundImage="url('"+h.heroImage+"')";
+    else hb.style.background="linear-gradient(160deg,#2b302c,#404c3c)";
+    document.getElementById("heroName").textContent=h.name||"Villaen i Alsvik";
+    document.getElementById("heroTag").textContent=h.tagline||"";
+    var meta="";
+    if(h.checkIn) meta+='<span>Innsjekk '+esc(h.checkIn)+'</span>';
+    if(h.checkOut) meta+='<span>Utsjekk '+esc(h.checkOut)+'</span>';
+    meta+='<span>Ryfylke · Norge</span>';
+    document.getElementById("heroMeta").innerHTML=meta;
+
+    var hi=document.getElementById("houseImg");
+    if(h.houseImage) hi.src=h.houseImage; else hi.style.display="none";
+    var ai=document.getElementById("areaImg");
+    if(h.areaImage) ai.src=h.areaImage; else ai.style.display="none";
+
+    document.getElementById("introText").textContent=h.intro||"";
+    document.getElementById("factsBox").innerHTML=
+      fact("Innsjekk",h.checkIn||"—")+fact("Utsjekk",h.checkOut||"—")+
+      fact("Beliggenhet","Alsvik")+fact("Region","Ryfylke");
+    document.getElementById("contactCard").innerHTML=
+      crow("Vert",h.contactName)+crow("Telefon",h.contactPhone)+crow("E-post",h.contactEmail);
+
+    var g="";
+    (D.manuals||[]).forEach(function(m){
+      g+='<div class="guide-card" onclick="openManual(\''+esc(m.id)+'\')">'+iconSvg(m.icon)+
+         '<div><h3>'+esc(m.title)+'</h3><p>'+esc(m.summary)+'</p></div>'+
+         '<span class="gc-go">Les veiledning</span></div>';
+    });
+    document.getElementById("guideGrid").innerHTML=g||
+      '<div class="guide-card"><div><h3>Ingen veiledninger ennå</h3><p>Logg inn på admin for å legge til.</p></div></div>';
+    document.getElementById("footYear").textContent="Ryfylke, Norge — "+new Date().getFullYear();
+  }catch(e){ /* feiler trygt — siden vises uansett */ }
+}
+function fact(k,v){return '<div class="fact"><div class="k">'+esc(k)+'</div><div class="v">'+esc(v)+'</div></div>';}
+function crow(k,v){return '<div class="row"><div class="k">'+esc(k)+'</div><div class="v">'+esc(v||"—")+'</div></div>';}
+
+function videoHtml(url){
+  if(!url) return "";
+  var yt=url.match(/[?&]v=([^&]+)/)||url.match(/youtu\.be\/([^?]+)/)||url.match(/youtube\.com\/embed\/([^?]+)/);
+  if(/youtube\.com|youtu\.be/.test(url)&&yt){
+    return '<div class="m-video"><iframe src="https://www.youtube.com/embed/'+encodeURIComponent(yt[1])+
+      '" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
+  }
+  var vm=url.match(/vimeo\.com\/(\d+)/);
+  if(vm){return '<div class="m-video"><iframe src="https://player.vimeo.com/video/'+encodeURIComponent(vm[1])+
+    '" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen></iframe></div>';}
+  return '<div class="m-video"><video src="'+esc(url)+'" controls preload="metadata"></video></div>';
+}
+
+function openManual(id){
+  var list=D.manuals||[], m=null;
+  for(var i=0;i<list.length;i++){ if(list[i].id===id){ m=list[i]; break; } }
+  if(!m){ goHome(); return; }
+  document.getElementById("mTitle").textContent=m.title||"";
+  document.getElementById("mSummary").textContent=m.summary||"";
+  var html="";
+  (m.sections||[]).forEach(function(s){
+    html+='<div class="m-section">';
+    if(s.heading) html+='<h3>'+esc(s.heading)+'</h3>';
+    if(s.type==="checklist"){
+      html+='<ul class="m-check">';
+      (s.items||[]).forEach(function(it){ if(it) html+='<li>'+esc(it)+'</li>'; });
+      html+='</ul>';
+    }else{
+      if(s.video) html+=videoHtml(s.video);
+      if(s.body) html+='<p>'+esc(s.body)+'</p>';
+    }
+    html+='</div>';
+  });
+  document.getElementById("mBody").innerHTML=html;
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("manualPage").classList.add("active");
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.getElementById("manualPage").classList.remove("active");
+  document.getElementById("home").classList.remove("hidden");
+}
+function scrollToId(id){
+  var el=document.getElementById(id);
+  if(el) setTimeout(function(){el.scrollIntoView({behavior:"smooth"});},60);
+}
+
+window.addEventListener("scroll",function(){
+  var h=document.getElementById("hdr");
+  if(window.scrollY>80) h.classList.add("scrolled"); else h.classList.remove("scrolled");
+},{passive:true});
+
+function initReveal(){
+  var els=document.querySelectorAll(".reveal");
+  if(!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in");});return;}
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);} });
+  },{threshold:.12});
+  els.forEach(function(e){io.observe(e);});
+}
+
+/* ---- ADMIN ---- */
+var WORK=null;
+
+function openAdmin(){
+  document.getElementById("adminOverlay").classList.add("active");
+  document.getElementById("adminLogin").classList.remove("hidden");
+  document.getElementById("adminEditor").classList.add("hidden");
+  document.getElementById("pwInput").value="";
+  document.getElementById("pwErr").style.display="none";
+  document.body.style.overflow="hidden";
+}
+function closeAdmin(){
+  document.getElementById("adminOverlay").classList.remove("active");
+  document.body.style.overflow="";
+}
+function tryLogin(){
+  var v=document.getElementById("pwInput").value;
+  if(v===ADMIN_PASSWORD){
+    WORK=JSON.parse(JSON.stringify(D));
+    if(!WORK.house||typeof WORK.house!=="object") WORK.house=JSON.parse(JSON.stringify(DEFAULT_DATA.house));
+    if(!Array.isArray(WORK.manuals)) WORK.manuals=[];
+    document.getElementById("adminLogin").classList.add("hidden");
+    document.getElementById("adminEditor").classList.remove("hidden");
+    renderAdmin();
+  }else{
+    document.getElementById("pwErr").style.display="block";
+  }
+}
+function toast(msg){
+  var t=document.getElementById("toast");
+  t.textContent=msg; t.classList.remove("hidden");
+  clearTimeout(window._tt);
+  window._tt=setTimeout(function(){t.classList.add("hidden");},2800);
+}
+
+function renderAdmin(){
+  var h=WORK.house, b="";
+  b+='<h2 class="admin-title">Generell informasjon</h2>';
+  b+='<p class="admin-hint">Tekst som vises på forsiden — tittel, ingress, bilder og kontaktinfo.</p>';
+  b+='<div class="card">';
+  b+=row2(inp("Navn på huset","house.name",h.name),inp("Slagord","house.tagline",h.tagline));
+  b+=ta("Introtekst","house.intro",h.intro);
+  b+=row2(inp("Innsjekk","house.checkIn",h.checkIn),inp("Utsjekk","house.checkOut",h.checkOut));
+  b+=row2(inp("Vert (navn)","house.contactName",h.contactName),inp("Telefon","house.contactPhone",h.contactPhone));
+  b+=inp("E-post","house.contactEmail",h.contactEmail);
+  b+=inp("Hero-bilde (lenke)","house.heroImage",h.heroImage);
+  b+=row2(inp("Bilde av huset (lenke)","house.houseImage",h.houseImage),inp("Bilde av området (lenke)","house.areaImage",h.areaImage));
+  b+='</div>';
+
+  b+='<h2 class="admin-title">Veiledninger</h2>';
+  b+='<p class="admin-hint">Hver veiledning blir et kort i guidebook. Legg til tekst, video (YouTube-lenke) og sjekklister.</p>';
+  WORK.manuals.forEach(function(m,mi){
+    b+='<div class="card">';
+    b+='<div class="card-head"><h3>'+esc(m.title||"Uten tittel")+'</h3><div class="card-actions">';
+    b+='<button class="btn ghost small" onclick="moveM('+mi+',-1)">↑</button>';
+    b+='<button class="btn ghost small" onclick="moveM('+mi+',1)">↓</button>';
+    b+='<button class="btn danger small" onclick="delM('+mi+')">Slett</button></div></div>';
+    b+=row2(inp("Tittel","M."+mi+".title",m.title),sel("Ikon","M."+mi+".icon",m.icon));
+    b+=inp("Kort beskrivelse (vises på kortet)","M."+mi+".summary",m.summary);
+    (m.sections||[]).forEach(function(s,si){
+      b+='<div class="block-ed"><div class="block-top"><span class="block-type">'+
+        (s.type==="checklist"?"Sjekkliste":"Tekst / video")+'</span>'+
+        '<button class="btn danger small" onclick="delS('+mi+','+si+')">Fjern blokk</button></div>';
+      b+=inp("Overskrift","S."+mi+"."+si+".heading",s.heading);
+      if(s.type==="checklist"){
+        b+='<div class="field"><label>Punkter</label>';
+        (s.items||[]).forEach(function(it,ii){
+          b+='<div style="display:flex;gap:8px;margin-bottom:8px">'+
+            '<input class="input" value="'+esc(it)+'" oninput="setItem('+mi+','+si+','+ii+',this.value)"/>'+
+            '<button class="btn ghost small" onclick="delItem('+mi+','+si+','+ii+')">✕</button></div>';
+        });
+        b+='<button class="btn ghost small" onclick="addItem('+mi+','+si+')">+ Legg til punkt</button></div>';
+      }else{
+        b+=ta("Brødtekst","S."+mi+"."+si+".body",s.body);
+        b+=inp("Video — YouTube/Vimeo-lenke (valgfritt)","S."+mi+"."+si+".video",s.video);
+      }
+      b+='</div>';
+    });
+    b+='<div style="display:flex;gap:10px;margin-top:8px">'+
+      '<button class="btn ghost small" onclick="addS('+mi+',\'text\')">+ Tekst / video</button>'+
+      '<button class="btn ghost small" onclick="addS('+mi+',\'checklist\')">+ Sjekkliste</button></div>';
+    b+='</div>';
+  });
+  b+='<button class="btn" style="margin-top:12px" onclick="addM()">+ Ny veiledning</button>';
+  document.getElementById("adminBody").innerHTML=b;
+}
+
+function inp(label,path,val){
+  return '<div class="field"><label>'+esc(label)+'</label>'+
+    '<input class="input" value="'+esc(val)+'" oninput="setVal(\''+path+'\',this.value)"/></div>';
+}
+function ta(label,path,val){
+  return '<div class="field"><label>'+esc(label)+'</label>'+
+    '<textarea class="textarea" oninput="setVal(\''+path+'\',this.value)">'+esc(val)+'</textarea></div>';
+}
+function sel(label,path,val){
+  var opts=["key","wifi","flame","thermometer","compass","door","book"], o="";
+  opts.forEach(function(x){o+='<option value="'+x+'"'+(x===val?' selected':'')+'>'+x+'</option>';});
+  return '<div class="field"><label>'+esc(label)+'</label>'+
+    '<select class="select" onchange="setVal(\''+path+'\',this.value)">'+o+'</select></div>';
+}
+function row2(a,b){return '<div class="grid-2">'+a+b+'</div>';}
+
+function setVal(path,value){
+  if(path.indexOf("house.")===0){ WORK.house[path.split(".")[1]]=value; return; }
+  var p=path.split(".");
+  if(p[0]==="M"){ WORK.manuals[+p[1]][p[2]]=value; }
+  else if(p[0]==="S"){ WORK.manuals[+p[1]].sections[+p[2]][p[3]]=value; }
+}
+function setItem(mi,si,ii,v){ WORK.manuals[mi].sections[si].items[ii]=v; }
+function addItem(mi,si){ WORK.manuals[mi].sections[si].items.push(""); renderAdmin(); }
+function delItem(mi,si,ii){ WORK.manuals[mi].sections[si].items.splice(ii,1); renderAdmin(); }
+function addM(){
+  WORK.manuals.push({id:"ny-"+Math.random().toString(36).slice(2,7),icon:"book",
+    title:"Ny veiledning",summary:"Kort beskrivelse.",
+    sections:[{type:"text",heading:"Overskrift",body:"",video:""}]});
+  renderAdmin(); toast("Ny veiledning lagt til nederst");
+}
+function delM(i){ if(confirm("Slette denne veiledningen?")){ WORK.manuals.splice(i,1); renderAdmin(); } }
+function moveM(i,d){
+  var j=i+d; if(j<0||j>=WORK.manuals.length) return;
+  var t=WORK.manuals[i]; WORK.manuals[i]=WORK.manuals[j]; WORK.manuals[j]=t; renderAdmin();
+}
+function addS(mi,type){
+  var blk=type==="checklist"
+    ?{type:"checklist",heading:"Sjekkliste",items:[""]}
+    :{type:"text",heading:"",body:"",video:""};
+  WORK.manuals[mi].sections.push(blk); renderAdmin();
+}
+function delS(mi,si){ WORK.manuals[mi].sections.splice(si,1); renderAdmin(); }
+
+function downloadData(){
+  var header=
+"// ════════════════════════════════════════════════════════════\n"+
+"//  VILLAEN I ALSVIK — INNHOLD\n"+
+"//  Generert fra admin-panelet. Legg denne filen opp på GitHub\n"+
+"//  (erstatt den gamle data.js). Siden oppdateres på ~30 sek.\n"+
+"// ════════════════════════════════════════════════════════════\n\n"+
+"window.VILLA_DATA = ";
+  var body=JSON.stringify(WORK,null,2);
+  var blob=new Blob([header+body+";\n"],{type:"text/javascript"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="data.js";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  toast("data.js lastet ned — legg den opp på GitHub");
+}
+
+renderHome();
+initReveal();
+</script>
+</body>
+</html>
