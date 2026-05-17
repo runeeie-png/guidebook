@@ -1,0 +1,21 @@
+// app/layout.js
+import "./globals.css";
+
+export const metadata = {
+  title: "Villaen i Alsvik — Guidebook & informasjon",
+  description:
+    "Et stille hus ved fjorden, i hjertet av Ryfylke. Guidebook, praktisk informasjon og veiledninger for gjester.",
+  openGraph: {
+    title: "Villaen i Alsvik",
+    description: "Et stille hus ved fjorden, i hjertet av Ryfylke.",
+    type: "website",
+  },
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="no">
+      <body>{children}</body>
+    </html>
+  );
+}
