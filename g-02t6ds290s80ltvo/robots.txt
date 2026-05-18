@@ -1,2 +1,0 @@
-User-agent: *
-Disallow: /g-02t6ds290s80ltvo/
