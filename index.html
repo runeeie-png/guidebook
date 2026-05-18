@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Villaen i Alsvik — Guidebook & informasjon</title>
-<meta name="description" content="Et stille hus ved fjorden, i hjertet av Ryfylke. Guidebook og praktisk informasjon for gjester." />
+<title>Villaen i Alsvik — Guidebook</title>
+<meta name="description" content="A quiet house by the fjord, in the heart of Ryfylke. Guidebook and practical information for guests." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --stone-900:#1c1f1d; --stone-800:#2b302c; --stone-700:#3d433d;
-    --moss:#5b6b54; --moss-deep:#404c3c; --fog:#d7d9d2;
-    --linen:#ece9e1; --linen-warm:#f4f1e8; --paper:#faf8f2;
-    --rust:#a8623c; --gold:#c9a25a; --muted:#6f746b;
-    --serif:"Fraunces",Georgia,serif; --sans:"Jost",system-ui,sans-serif;
-    --maxw:1200px; --ease:cubic-bezier(.16,1,.3,1);
+    --stone-900:#1c1f1d;--stone-800:#2b302c;--stone-700:#3d433d;
+    --moss:#5b6b54;--moss-deep:#404c3c;--fog:#d7d9d2;
+    --linen:#ece9e1;--linen-warm:#f4f1e8;--paper:#faf8f2;
+    --rust:#a8623c;--gold:#c9a25a;--muted:#6f746b;
+    --serif:"Fraunces",Georgia,serif;--sans:"Jost",system-ui,sans-serif;
+    --maxw:1200px;--ease:cubic-bezier(.16,1,.3,1);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -41,11 +41,18 @@
   .brand{font-family:var(--serif);font-size:20px;letter-spacing:.02em;cursor:pointer}
   .brand small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.34em;
     text-transform:uppercase;opacity:.7;margin-top:3px}
-  .nav{display:flex;gap:38px;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+  .header-right{display:flex;align-items:center;gap:30px}
+  .nav{display:flex;gap:34px;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
   .nav a{position:relative;padding-bottom:3px;cursor:pointer}
   .nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
     background:currentColor;transition:width .4s var(--ease)}
   .nav a:hover::after{width:100%}
+  .lang{display:flex;gap:4px;font-size:12px;letter-spacing:.1em}
+  .lang button{background:none;border:none;color:inherit;cursor:pointer;font-family:var(--sans);
+    padding:4px 7px;opacity:.55;text-transform:uppercase;letter-spacing:.12em;font-size:12px;
+    transition:opacity .3s;border-radius:2px}
+  .lang button.active{opacity:1;font-weight:500;border:1px solid currentColor}
+  .lang button:hover{opacity:.9}
 
   .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden;color:#fff}
   .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;
@@ -102,6 +109,20 @@
   .gc-go::after{content:"→";transition:transform .4s var(--ease)}
   .guide-card:hover .gc-go::after{transform:translateX(8px)}
 
+  .trips{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:20px}
+  .trip{background:var(--paper);border:1px solid rgba(0,0,0,.08);overflow:hidden;
+    display:flex;flex-direction:column}
+  .trip-img{aspect-ratio:3/2;background:var(--fog);overflow:hidden}
+  .trip-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+  .trip:hover .trip-img img{transform:scale(1.05)}
+  .trip-body{padding:28px;display:flex;flex-direction:column;flex:1}
+  .trip-body h3{font-size:1.4rem}
+  .trip-body p{margin-top:12px;color:var(--muted);font-size:15px;flex:1}
+  .trip-map{margin-top:20px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--moss);display:inline-flex;align-items:center;gap:8px}
+  .trip-map::before{content:"";width:14px;height:14px;border:1.5px solid var(--moss);
+    border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:inline-block}
+
   .manual-page{padding:140px 0 130px;display:none}
   .manual-page.active{display:block}
   .back-link{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);
@@ -129,11 +150,10 @@
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
   .contact h2{font-size:clamp(2.2rem,5vw,3.8rem)}
   .contact p{margin-top:22px;color:var(--muted);font-size:18px}
-  .contact-card{background:var(--paper);border:1px solid rgba(0,0,0,.08);padding:50px}
-  .contact-card .row{padding:20px 0;border-bottom:1px solid rgba(0,0,0,.08)}
-  .contact-card .row:last-child{border-bottom:none}
-  .contact-card .k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--moss)}
-  .contact-card .v{font-family:var(--serif);font-size:22px;margin-top:6px}
+  .contact-card{background:var(--paper);border:1px solid rgba(0,0,0,.08);padding:50px;
+    font-family:var(--serif);font-size:21px;line-height:1.5}
+  .contact-card .small{font-family:var(--sans);font-size:13px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--moss);margin-bottom:18px}
 
   footer{background:var(--stone-900);color:rgba(236,233,225,.7);padding:60px 0;font-size:14px}
   footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
@@ -159,7 +179,7 @@
     color:var(--stone-900);padding:13px 15px;font-family:var(--sans);font-size:16px;
     border-radius:2px;outline:none;transition:border-color .3s}
   .input:focus,.textarea:focus,.select:focus{border-color:var(--moss)}
-  .textarea{min-height:120px;resize:vertical;line-height:1.6}
+  .textarea{min-height:110px;resize:vertical;line-height:1.6}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--moss);
     color:var(--paper);border:none;padding:14px 28px;font-family:var(--sans);font-size:13px;
     font-weight:500;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:2px;
@@ -179,6 +199,11 @@
   .card-head h3{font-size:1.35rem}
   .card-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .lang-tabs{display:flex;gap:6px;margin-bottom:8px}
+  .lang-tabs button{background:none;border:1px solid rgba(0,0,0,.2);color:var(--muted);
+    padding:5px 12px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+    border-radius:2px;font-family:var(--sans)}
+  .lang-tabs button.active{background:var(--moss);color:var(--paper);border-color:var(--moss)}
   .block-ed{border:1px solid rgba(0,0,0,.12);border-radius:3px;padding:18px;margin-bottom:12px;
     background:var(--linen-warm)}
   .block-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -191,12 +216,13 @@
   .save-bar b{font-weight:500}
 
   @media(max-width:900px){
-    .site-header,.site-header.scrolled{padding:16px 20px}
+    .site-header,.site-header.scrolled{padding:16px 18px}
     .nav{display:none}
+    .header-right{gap:14px}
     .hero-inner{padding:0 22px 60px}
     .hero-meta{flex-direction:column;gap:14px}
     .split,.contact-grid{grid-template-columns:1fr;gap:42px}
-    .guide-grid{grid-template-columns:1fr}
+    .guide-grid,.trips{grid-template-columns:1fr}
     .section-pad{padding:80px 0}
     .wrap{padding:0 20px}
     .grid-2{grid-template-columns:1fr}
@@ -209,19 +235,26 @@
 <div id="site">
   <header class="site-header" id="hdr">
     <div class="brand" onclick="goHome()">Villaen<small>i Alsvik · Ryfylke</small></div>
-    <nav class="nav">
-      <a onclick="goHome();scrollToId('huset')">Huset</a>
-      <a onclick="goHome();scrollToId('guidebook')">Guidebook</a>
-      <a onclick="goHome();scrollToId('omradet')">Området</a>
-      <a onclick="goHome();scrollToId('kontakt')">Kontakt</a>
-    </nav>
+    <div class="header-right">
+      <nav class="nav">
+        <a onclick="goHome();scrollToId('huset')" data-t="nav_house">The house</a>
+        <a onclick="goHome();scrollToId('guidebook')" data-t="nav_guide">Guidebook</a>
+        <a onclick="goHome();scrollToId('omradet')" data-t="nav_area">The area</a>
+        <a onclick="goHome();scrollToId('kontakt')" data-t="nav_contact">Contact</a>
+      </nav>
+      <div class="lang" id="langSwitch">
+        <button data-l="en" onclick="setLang('en')">EN</button>
+        <button data-l="no" onclick="setLang('no')">NO</button>
+        <button data-l="de" onclick="setLang('de')">DE</button>
+      </div>
+    </div>
   </header>
 
   <div id="home">
     <section class="hero">
       <div class="hero-bg" id="heroBg"></div>
       <div class="hero-inner">
-        <div class="eyebrow reveal" style="color:rgba(255,255,255,.85)">Feriebolig til leie · Ryfylke</div>
+        <div class="eyebrow reveal" id="heroEyebrow" style="color:rgba(255,255,255,.85)"></div>
         <h1 class="reveal" id="heroName">Villaen i Alsvik</h1>
         <p class="lede reveal" id="heroTag"></p>
         <div class="hero-meta reveal" id="heroMeta"></div>
@@ -237,8 +270,8 @@
             <span class="frame-tag">Villaen — Alsvik</span>
           </div>
           <div class="split-text">
-            <div class="eyebrow reveal">Velkommen</div>
-            <h2 class="reveal" style="margin-top:16px">Et hus som puster med fjorden</h2>
+            <div class="eyebrow reveal" data-t="welcome">Welcome</div>
+            <h2 class="reveal" id="houseH2" style="margin-top:16px"></h2>
             <p class="reveal" id="introText"></p>
             <div class="facts reveal" id="factsBox"></div>
           </div>
@@ -249,9 +282,9 @@
     <section id="guidebook" class="guide-band section-pad">
       <div class="wrap">
         <div class="section-head">
-          <div class="eyebrow reveal">Guidebook</div>
-          <h2 class="reveal">Alt du trenger for et godt opphold</h2>
-          <p class="reveal">Korte, tydelige veiledninger med tekst og video — fra ankomst til avreise. Trykk på et tema for å lese mer.</p>
+          <div class="eyebrow reveal" data-t="guidebook">Guidebook</div>
+          <h2 class="reveal" id="guideH2"></h2>
+          <p class="reveal" id="guideP"></p>
         </div>
         <div class="guide-grid" id="guideGrid"></div>
       </div>
@@ -259,18 +292,12 @@
 
     <section id="omradet" class="section-pad">
       <div class="wrap">
-        <div class="split">
-          <div class="split-text">
-            <div class="eyebrow reveal">Området</div>
-            <h2 class="reveal" style="margin-top:16px">Ryfylke rett utenfor døren</h2>
-            <p class="reveal">Fra Alsvik natursenter med stier og badeplasser, til Preikestolen og fjordcruise på Lysefjorden — det meste ligger innen rekkevidde for en dagstur. Du finner detaljerte tips i guidebook-delen.</p>
-            <button class="btn reveal" style="margin-top:34px" onclick="openManual('omradet')">Se opplevelser</button>
-          </div>
-          <div class="split-media reveal">
-            <img id="areaImg" alt="Ryfylke landskap" />
-            <span class="frame-tag">Lysefjorden · Ryfylke</span>
-          </div>
+        <div class="section-head">
+          <div class="eyebrow reveal" data-t="area">The area</div>
+          <h2 class="reveal" id="areaH2"></h2>
+          <p class="reveal" id="areaP"></p>
         </div>
+        <div class="trips" id="tripsGrid"></div>
       </div>
     </section>
 
@@ -278,11 +305,13 @@
       <div class="wrap">
         <div class="contact-grid">
           <div>
-            <div class="eyebrow reveal">Kontakt</div>
-            <h2 class="reveal" style="margin-top:16px">Er det noe du lurer på?</h2>
-            <p class="reveal">Ta gjerne kontakt før eller under oppholdet. Vi svarer så raskt vi kan, og hjelper gjerne med tips til turer og praktiske ting.</p>
+            <div class="eyebrow reveal" data-t="contact">Contact</div>
+            <h2 class="reveal" id="contactH2" style="margin-top:16px"></h2>
           </div>
-          <div class="contact-card reveal" id="contactCard"></div>
+          <div class="contact-card reveal">
+            <div class="small" data-t="contact_label">Booking platforms</div>
+            <div id="contactBody"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -290,8 +319,8 @@
 
   <main class="manual-page" id="manualPage">
     <div class="wrap">
-      <button class="back-link" onclick="goHome()">← Tilbake til guidebook</button>
-      <div class="eyebrow">Guidebook</div>
+      <button class="back-link" onclick="goHome()" id="backLink">← Back to guidebook</button>
+      <div class="eyebrow" data-t="guidebook">Guidebook</div>
       <h1 id="mTitle" style="margin-top:16px"></h1>
       <p class="lede" id="mSummary"></p>
       <div class="manual-body" id="mBody"></div>
@@ -311,29 +340,29 @@
   <div class="admin-login" id="adminLogin">
     <div class="box">
       <div class="eyebrow" style="color:var(--gold)">Villaen i Alsvik</div>
-      <h2>Administrasjon</h2>
-      <p>Logg inn for å redigere guidebook og veiledninger.</p>
+      <h2>Administration</h2>
+      <p>Log in to edit the guidebook and content.</p>
       <div class="field">
-        <label>Passord</label>
+        <label>Password</label>
         <input class="input" type="password" id="pwInput" placeholder="••••••••"
           onkeydown="if(event.key==='Enter')tryLogin()" />
       </div>
-      <div id="pwErr" style="color:#e8a;font-size:14px;margin-bottom:14px;display:none">Feil passord. Prøv igjen.</div>
-      <button class="btn" style="width:100%" onclick="tryLogin()">Logg inn</button>
-      <button class="admin-link" style="color:rgba(236,233,225,.5);margin-top:20px" onclick="closeAdmin()">← Tilbake til siden</button>
+      <div id="pwErr" style="color:#e8a;font-size:14px;margin-bottom:14px;display:none">Wrong password. Try again.</div>
+      <button class="btn" style="width:100%" onclick="tryLogin()">Log in</button>
+      <button class="admin-link" style="color:rgba(236,233,225,.5);margin-top:20px" onclick="closeAdmin()">← Back to site</button>
     </div>
   </div>
 
   <div id="adminEditor" class="hidden">
     <div class="save-bar">
-      Endringer lagres ikke automatisk. Når du er ferdig: trykk <b>Last ned data.js</b>,
-      og legg den nye filen opp på GitHub (erstatt den gamle). Siden oppdateres på ~30 sekunder.
+      Changes are not saved automatically. When done: click <b>Download data.js</b>,
+      and upload the new file to GitHub (replace the old one). The site updates in ~30 seconds.
     </div>
     <div class="admin-top">
       <div class="brand" style="font-size:17px">Villaen · Admin</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn ghost small" onclick="closeAdmin()">Se nettside</button>
-        <button class="btn small" onclick="downloadData()">⬇ Last ned data.js</button>
+        <button class="btn ghost small" onclick="closeAdmin()">View site</button>
+        <button class="btn small" onclick="downloadData()">⬇ Download data.js</button>
       </div>
     </div>
     <div class="admin-main" id="adminBody"></div>
@@ -346,69 +375,136 @@
 <script>
 "use strict";
 
-var DEFAULT_DATA = {
-  house:{name:"Villaen i Alsvik",tagline:"Et stille hus ved fjorden, i hjertet av Ryfylke",
-    intro:"",checkIn:"",checkOut:"",contactName:"",contactPhone:"",contactEmail:"",
-    heroImage:"",houseImage:"",areaImage:""},
-  manuals:[]
+var LANGS=["en","no","de"];
+var UI={
+  en:{nav_house:"The house",nav_guide:"Guidebook",nav_area:"The area",nav_contact:"Contact",
+      welcome:"Welcome",guidebook:"Guidebook",area:"The area",contact:"Contact",
+      contact_label:"Booking platforms",back:"← Back to guidebook",
+      house_h2:"A house that breathes with the fjord",guide_h2:"Everything you need for a good stay",
+      guide_p:"Short, clear guides with text and video — from arrival to departure. Tap a topic to read more.",
+      read:"Read guide",checkin:"Check-in",checkout:"Check-out",location:"Location",region:"Region",
+      map:"Open in maps",foot:"Ryfylke, Norway"},
+  no:{nav_house:"Huset",nav_guide:"Guidebook",nav_area:"Området",nav_contact:"Kontakt",
+      welcome:"Velkommen",guidebook:"Guidebook",area:"Området",contact:"Kontakt",
+      contact_label:"Bookingplattformer",back:"← Tilbake til guidebook",
+      house_h2:"Et hus som puster med fjorden",guide_h2:"Alt du trenger for et godt opphold",
+      guide_p:"Korte, tydelige veiledninger med tekst og video — fra ankomst til avreise. Trykk på et tema for å lese mer.",
+      read:"Les veiledning",checkin:"Innsjekk",checkout:"Utsjekk",location:"Beliggenhet",region:"Region",
+      map:"Åpne i kart",foot:"Ryfylke, Norge"},
+  de:{nav_house:"Das Haus",nav_guide:"Guidebook",nav_area:"Die Umgebung",nav_contact:"Kontakt",
+      welcome:"Willkommen",guidebook:"Guidebook",area:"Die Umgebung",contact:"Kontakt",
+      contact_label:"Buchungsplattformen",back:"← Zurück zum Guidebook",
+      house_h2:"Ein Haus, das mit dem Fjord atmet",guide_h2:"Alles für einen guten Aufenthalt",
+      guide_p:"Kurze, klare Anleitungen mit Text und Video — von der Ankunft bis zur Abreise. Tippen Sie auf ein Thema für mehr.",
+      read:"Anleitung lesen",checkin:"Check-in",checkout:"Check-out",location:"Lage",region:"Region",
+      map:"In Karte öffnen",foot:"Ryfylke, Norwegen"}
 };
-var D = (window.VILLA_DATA && typeof window.VILLA_DATA==="object") ? window.VILLA_DATA : DEFAULT_DATA;
-if(!D.house || typeof D.house!=="object") D.house = DEFAULT_DATA.house;
-if(!Array.isArray(D.manuals)) D.manuals = [];
 
-var ADMIN_PASSWORD = "villaen2024"; // BYTT dette til ditt eget passord
+var DEFAULT_DATA={defaultLang:"en",
+  house:{name:"Villaen i Alsvik",tagline:{},intro:{},checkIn:{},checkOut:{},heroImage:"",houseImage:""},
+  contact:{heading:{},body:{}},
+  area:{heading:{},intro:{},trips:[]},
+  manuals:[]};
+var D=(window.VILLA_DATA&&typeof window.VILLA_DATA==="object")?window.VILLA_DATA:DEFAULT_DATA;
+if(!D.house||typeof D.house!=="object")D.house=DEFAULT_DATA.house;
+if(!D.contact||typeof D.contact!=="object")D.contact=DEFAULT_DATA.contact;
+if(!D.area||typeof D.area!=="object")D.area=DEFAULT_DATA.area;
+if(!Array.isArray(D.area.trips))D.area.trips=[];
+if(!Array.isArray(D.manuals))D.manuals=[];
 
-var ICONS = {
+var LANG=(LANGS.indexOf(D.defaultLang)>=0)?D.defaultLang:"en";
+var ADMIN_PASSWORD="villaen2024"; // BYTT dette til ditt eget passord
+
+// Hent tekst fra et flerspråklig felt, med fallback
+function t(field){
+  if(field==null) return "";
+  if(typeof field==="string") return field; // tåler gammelt enkeltspråk-format
+  return field[LANG] || field.en || field.no || field.de || "";
+}
+function ui(key){ return (UI[LANG]&&UI[LANG][key])||UI.en[key]||key; }
+
+var ICONS={
   key:'<circle cx="8" cy="8" r="5"/><path d="M11.5 11.5 21 21M16 16l3-3M19 19l2-2"/>',
   wifi:'<path d="M2 8.5a16 16 0 0 1 20 0"/><path d="M5 12a11 11 0 0 1 14 0"/><path d="M8.5 15.5a6 6 0 0 1 7 0"/><circle cx="12" cy="19" r="0.6"/>',
   flame:'<path d="M12 3c1 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1.5.6-2.5 1.3-3.3C9 9 9.5 11 11 11c1.2 0 1.4-1.7.4-3.3C10.5 6 12 4 12 3Z"/>',
   thermometer:'<path d="M12 3.5a2 2 0 0 1 2 2v8.2a4 4 0 1 1-4 0V5.5a2 2 0 0 1 2-2Z"/><path d="M12 14V8"/>',
   compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/>',
   door:'<path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><path d="M4 21h16"/><circle cx="14.5" cy="12" r="0.7"/>',
-  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 19a2 2 0 0 1 2-2h13"/>'
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 19a2 2 0 0 1 2-2h13"/>',
+  water:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>'
 };
 function iconSvg(n){return '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[n]||ICONS.book)+'</svg>';}
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
-function renderHome(){
+function render(){
   try{
+    document.documentElement.lang=LANG;
+    // språkknapp aktiv
+    var ls=document.getElementById("langSwitch").querySelectorAll("button");
+    ls.forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-l")===LANG); });
+    // statiske UI-tekster
+    document.querySelectorAll("[data-t]").forEach(function(el){
+      el.textContent=ui(el.getAttribute("data-t"));
+    });
+    document.getElementById("backLink").textContent=ui("back");
+
     var h=D.house||{};
     var hb=document.getElementById("heroBg");
     if(h.heroImage) hb.style.backgroundImage="url('"+h.heroImage+"')";
     else hb.style.background="linear-gradient(160deg,#2b302c,#404c3c)";
+    document.getElementById("heroEyebrow").textContent={en:"Holiday home for rent · Ryfylke",no:"Feriebolig til leie · Ryfylke",de:"Ferienhaus zu vermieten · Ryfylke"}[LANG];
     document.getElementById("heroName").textContent=h.name||"Villaen i Alsvik";
-    document.getElementById("heroTag").textContent=h.tagline||"";
+    document.getElementById("heroTag").textContent=t(h.tagline);
     var meta="";
-    if(h.checkIn) meta+='<span>Innsjekk '+esc(h.checkIn)+'</span>';
-    if(h.checkOut) meta+='<span>Utsjekk '+esc(h.checkOut)+'</span>';
-    meta+='<span>Ryfylke · Norge</span>';
+    if(t(h.checkIn)) meta+='<span>'+ui("checkin")+' '+esc(t(h.checkIn))+'</span>';
+    if(t(h.checkOut)) meta+='<span>'+ui("checkout")+' '+esc(t(h.checkOut))+'</span>';
+    meta+='<span>Ryfylke · '+(LANG==="de"?"Norwegen":(LANG==="no"?"Norge":"Norway"))+'</span>';
     document.getElementById("heroMeta").innerHTML=meta;
 
     var hi=document.getElementById("houseImg");
-    if(h.houseImage) hi.src=h.houseImage; else hi.style.display="none";
-    var ai=document.getElementById("areaImg");
-    if(h.areaImage) ai.src=h.areaImage; else ai.style.display="none";
+    if(h.houseImage){ hi.src=h.houseImage; hi.style.display=""; } else hi.style.display="none";
 
-    document.getElementById("introText").textContent=h.intro||"";
+    document.getElementById("houseH2").textContent=ui("house_h2");
+    document.getElementById("introText").textContent=t(h.intro);
     document.getElementById("factsBox").innerHTML=
-      fact("Innsjekk",h.checkIn||"—")+fact("Utsjekk",h.checkOut||"—")+
-      fact("Beliggenhet","Alsvik")+fact("Region","Ryfylke");
-    document.getElementById("contactCard").innerHTML=
-      crow("Vert",h.contactName)+crow("Telefon",h.contactPhone)+crow("E-post",h.contactEmail);
+      fact(ui("checkin"),t(h.checkIn)||"—")+fact(ui("checkout"),t(h.checkOut)||"—")+
+      fact(ui("location"),"Alsvik")+fact(ui("region"),"Ryfylke");
 
+    document.getElementById("guideH2").textContent=ui("guide_h2");
+    document.getElementById("guideP").textContent=ui("guide_p");
     var g="";
     (D.manuals||[]).forEach(function(m){
       g+='<div class="guide-card" onclick="openManual(\''+esc(m.id)+'\')">'+iconSvg(m.icon)+
-         '<div><h3>'+esc(m.title)+'</h3><p>'+esc(m.summary)+'</p></div>'+
-         '<span class="gc-go">Les veiledning</span></div>';
+         '<div><h3>'+esc(t(m.title))+'</h3><p>'+esc(t(m.summary))+'</p></div>'+
+         '<span class="gc-go">'+ui("read")+'</span></div>';
     });
-    document.getElementById("guideGrid").innerHTML=g||
-      '<div class="guide-card"><div><h3>Ingen veiledninger ennå</h3><p>Logg inn på admin for å legge til.</p></div></div>';
-    document.getElementById("footYear").textContent="Ryfylke, Norge — "+new Date().getFullYear();
-  }catch(e){ /* feiler trygt — siden vises uansett */ }
+    document.getElementById("guideGrid").innerHTML=g;
+
+    // Området
+    var a=D.area||{};
+    document.getElementById("areaH2").textContent=t(a.heading);
+    document.getElementById("areaP").textContent=t(a.intro);
+    var tg="";
+    (a.trips||[]).forEach(function(tr){
+      tg+='<div class="trip">';
+      if(tr.image) tg+='<div class="trip-img"><img src="'+esc(tr.image)+'" alt=""></div>';
+      tg+='<div class="trip-body"><h3>'+esc(t(tr.title))+'</h3><p>'+esc(t(tr.text))+'</p>';
+      if(tr.mapUrl) tg+='<a class="trip-map" href="'+esc(tr.mapUrl)+'" target="_blank" rel="noopener">'+ui("map")+'</a>';
+      tg+='</div></div>';
+    });
+    document.getElementById("tripsGrid").innerHTML=tg;
+
+    // Kontakt
+    var c=D.contact||{};
+    document.getElementById("contactH2").textContent=t(c.heading);
+    document.getElementById("contactBody").textContent=t(c.body);
+
+    document.getElementById("footYear").textContent=ui("foot")+" — "+new Date().getFullYear();
+  }catch(e){ /* feiler trygt */ }
 }
 function fact(k,v){return '<div class="fact"><div class="k">'+esc(k)+'</div><div class="v">'+esc(v)+'</div></div>';}
-function crow(k,v){return '<div class="row"><div class="k">'+esc(k)+'</div><div class="v">'+esc(v||"—")+'</div></div>';}
+
+function setLang(l){ if(LANGS.indexOf(l)>=0){ LANG=l; render(); if(document.getElementById("manualPage").classList.contains("active")){ var id=document.getElementById("manualPage").getAttribute("data-mid"); if(id) openManual(id); } } }
 
 function videoHtml(url){
   if(!url) return "";
@@ -418,8 +514,7 @@ function videoHtml(url){
       '" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
   }
   var vm=url.match(/vimeo\.com\/(\d+)/);
-  if(vm){return '<div class="m-video"><iframe src="https://player.vimeo.com/video/'+encodeURIComponent(vm[1])+
-    '" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen></iframe></div>';}
+  if(vm) return '<div class="m-video"><iframe src="https://player.vimeo.com/video/'+encodeURIComponent(vm[1])+'" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen></iframe></div>';
   return '<div class="m-video"><video src="'+esc(url)+'" controls preload="metadata"></video></div>';
 }
 
@@ -427,23 +522,26 @@ function openManual(id){
   var list=D.manuals||[], m=null;
   for(var i=0;i<list.length;i++){ if(list[i].id===id){ m=list[i]; break; } }
   if(!m){ goHome(); return; }
-  document.getElementById("mTitle").textContent=m.title||"";
-  document.getElementById("mSummary").textContent=m.summary||"";
+  document.getElementById("mTitle").textContent=t(m.title);
+  document.getElementById("mSummary").textContent=t(m.summary);
   var html="";
   (m.sections||[]).forEach(function(s){
     html+='<div class="m-section">';
-    if(s.heading) html+='<h3>'+esc(s.heading)+'</h3>';
+    if(s.heading&&t(s.heading)) html+='<h3>'+esc(t(s.heading))+'</h3>';
     if(s.type==="checklist"){
+      var items=s.items||{};
+      var arr=Array.isArray(items)?items:(items[LANG]||items.en||items.no||items.de||[]);
       html+='<ul class="m-check">';
-      (s.items||[]).forEach(function(it){ if(it) html+='<li>'+esc(it)+'</li>'; });
+      arr.forEach(function(it){ if(it) html+='<li>'+esc(it)+'</li>'; });
       html+='</ul>';
     }else{
       if(s.video) html+=videoHtml(s.video);
-      if(s.body) html+='<p>'+esc(s.body)+'</p>';
+      if(t(s.body)) html+='<p>'+esc(t(s.body))+'</p>';
     }
     html+='</div>';
   });
   document.getElementById("mBody").innerHTML=html;
+  document.getElementById("manualPage").setAttribute("data-mid",id);
   document.getElementById("home").classList.add("hidden");
   document.getElementById("manualPage").classList.add("active");
   window.scrollTo(0,0);
@@ -452,10 +550,7 @@ function goHome(){
   document.getElementById("manualPage").classList.remove("active");
   document.getElementById("home").classList.remove("hidden");
 }
-function scrollToId(id){
-  var el=document.getElementById(id);
-  if(el) setTimeout(function(){el.scrollIntoView({behavior:"smooth"});},60);
-}
+function scrollToId(id){ var el=document.getElementById(id); if(el) setTimeout(function(){el.scrollIntoView({behavior:"smooth"});},60); }
 
 window.addEventListener("scroll",function(){
   var h=document.getElementById("hdr");
@@ -472,7 +567,7 @@ function initReveal(){
 }
 
 /* ---- ADMIN ---- */
-var WORK=null;
+var WORK=null, EDLANG="en";
 
 function openAdmin(){
   document.getElementById("adminOverlay").classList.add("active");
@@ -482,144 +577,199 @@ function openAdmin(){
   document.getElementById("pwErr").style.display="none";
   document.body.style.overflow="hidden";
 }
-function closeAdmin(){
-  document.getElementById("adminOverlay").classList.remove("active");
-  document.body.style.overflow="";
-}
+function closeAdmin(){ document.getElementById("adminOverlay").classList.remove("active"); document.body.style.overflow=""; }
 function tryLogin(){
-  var v=document.getElementById("pwInput").value;
-  if(v===ADMIN_PASSWORD){
+  if(document.getElementById("pwInput").value===ADMIN_PASSWORD){
     WORK=JSON.parse(JSON.stringify(D));
-    if(!WORK.house||typeof WORK.house!=="object") WORK.house=JSON.parse(JSON.stringify(DEFAULT_DATA.house));
-    if(!Array.isArray(WORK.manuals)) WORK.manuals=[];
+    if(!WORK.house)WORK.house=JSON.parse(JSON.stringify(DEFAULT_DATA.house));
+    if(!WORK.contact)WORK.contact={heading:{},body:{}};
+    if(!WORK.area)WORK.area={heading:{},intro:{},trips:[]};
+    if(!Array.isArray(WORK.area.trips))WORK.area.trips=[];
+    if(!Array.isArray(WORK.manuals))WORK.manuals=[];
     document.getElementById("adminLogin").classList.add("hidden");
     document.getElementById("adminEditor").classList.remove("hidden");
     renderAdmin();
-  }else{
-    document.getElementById("pwErr").style.display="block";
-  }
+  }else document.getElementById("pwErr").style.display="block";
 }
 function toast(msg){
-  var t=document.getElementById("toast");
-  t.textContent=msg; t.classList.remove("hidden");
-  clearTimeout(window._tt);
-  window._tt=setTimeout(function(){t.classList.add("hidden");},2800);
+  var el=document.getElementById("toast");
+  el.textContent=msg; el.classList.remove("hidden");
+  clearTimeout(window._tt); window._tt=setTimeout(function(){el.classList.add("hidden");},2800);
 }
+function ml(obj){ obj=obj||{}; return {en:obj.en||"",no:obj.no||"",de:obj.de||""}; }
 
 function renderAdmin(){
-  var h=WORK.house, b="";
+  var b="";
+  b+='<div class="lang-tabs">';
+  LANGS.forEach(function(l){ b+='<button class="'+(l===EDLANG?"active":"")+'" onclick="setEdLang(\''+l+'\')">'+l.toUpperCase()+'</button>'; });
+  b+='</div><p class="admin-hint">Du redigerer nå språket: <b>'+EDLANG.toUpperCase()+'</b>. Bytt fane for hvert språk. Alle tre bør fylles ut.</p>';
+
+  var h=WORK.house;
   b+='<h2 class="admin-title">Generell informasjon</h2>';
-  b+='<p class="admin-hint">Tekst som vises på forsiden — tittel, ingress, bilder og kontaktinfo.</p>';
   b+='<div class="card">';
-  b+=row2(inp("Navn på huset","house.name",h.name),inp("Slagord","house.tagline",h.tagline));
-  b+=ta("Introtekst","house.intro",h.intro);
-  b+=row2(inp("Innsjekk","house.checkIn",h.checkIn),inp("Utsjekk","house.checkOut",h.checkOut));
-  b+=row2(inp("Vert (navn)","house.contactName",h.contactName),inp("Telefon","house.contactPhone",h.contactPhone));
-  b+=inp("E-post","house.contactEmail",h.contactEmail);
-  b+=inp("Hero-bilde (lenke)","house.heroImage",h.heroImage);
-  b+=row2(inp("Bilde av huset (lenke)","house.houseImage",h.houseImage),inp("Bilde av området (lenke)","house.areaImage",h.areaImage));
+  b+=inp("Navn på huset (likt alle språk)","house.name",h.name,true);
+  b+=tx("Slagord","house.tagline",h.tagline);
+  b+=tarea("Introtekst","house.intro",h.intro);
+  b+=row2(tx("Innsjekk","house.checkIn",h.checkIn),tx("Utsjekk","house.checkOut",h.checkOut));
+  b+=row2(inp("Hero-bilde (filnavn/URL)","house.heroImage",h.heroImage,true),inp("Bilde av huset (filnavn/URL)","house.houseImage",h.houseImage,true));
   b+='</div>';
 
+  b+='<h2 class="admin-title">Kontakt-seksjon</h2>';
+  b+='<div class="card">';
+  b+=tx("Overskrift","contact.heading",WORK.contact.heading);
+  b+=tarea("Tekst","contact.body",WORK.contact.body);
+  b+='</div>';
+
+  b+='<h2 class="admin-title">Området</h2>';
+  b+='<div class="card">';
+  b+=tx("Overskrift","area.heading",WORK.area.heading);
+  b+=tarea("Introtekst","area.intro",WORK.area.intro);
+  b+='</div>';
+  WORK.area.trips.forEach(function(tr,ti){
+    b+='<div class="card"><div class="card-head"><h3>'+esc(t2(tr.title))+'</h3><div class="card-actions">'+
+      '<button class="btn ghost small" onclick="moveTrip('+ti+',-1)">↑</button>'+
+      '<button class="btn ghost small" onclick="moveTrip('+ti+',1)">↓</button>'+
+      '<button class="btn danger small" onclick="delTrip('+ti+')">Slett</button></div></div>';
+    b+=tx("Tittel","T."+ti+".title",tr.title);
+    b+=tarea("Beskrivelse","T."+ti+".text",tr.text);
+    b+=row2(inp("Bilde (filnavn/URL)","T."+ti+".image",tr.image,true),inp("Kartlenke (Google Maps URL)","T."+ti+".mapUrl",tr.mapUrl,true));
+    b+='</div>';
+  });
+  b+='<button class="btn" style="margin-bottom:10px" onclick="addTrip()">+ Ny tur/sted</button>';
+
   b+='<h2 class="admin-title">Veiledninger</h2>';
-  b+='<p class="admin-hint">Hver veiledning blir et kort i guidebook. Legg til tekst, video (YouTube-lenke) og sjekklister.</p>';
   WORK.manuals.forEach(function(m,mi){
-    b+='<div class="card">';
-    b+='<div class="card-head"><h3>'+esc(m.title||"Uten tittel")+'</h3><div class="card-actions">';
-    b+='<button class="btn ghost small" onclick="moveM('+mi+',-1)">↑</button>';
-    b+='<button class="btn ghost small" onclick="moveM('+mi+',1)">↓</button>';
-    b+='<button class="btn danger small" onclick="delM('+mi+')">Slett</button></div></div>';
-    b+=row2(inp("Tittel","M."+mi+".title",m.title),sel("Ikon","M."+mi+".icon",m.icon));
-    b+=inp("Kort beskrivelse (vises på kortet)","M."+mi+".summary",m.summary);
+    b+='<div class="card"><div class="card-head"><h3>'+esc(t2(m.title))+'</h3><div class="card-actions">'+
+      '<button class="btn ghost small" onclick="moveM('+mi+',-1)">↑</button>'+
+      '<button class="btn ghost small" onclick="moveM('+mi+',1)">↓</button>'+
+      '<button class="btn danger small" onclick="delM('+mi+')">Slett</button></div></div>';
+    b+=row2(tx("Tittel","M."+mi+".title",m.title),selIcon("M."+mi+".icon",m.icon));
+    b+=tx("Kort beskrivelse","M."+mi+".summary",m.summary);
     (m.sections||[]).forEach(function(s,si){
       b+='<div class="block-ed"><div class="block-top"><span class="block-type">'+
         (s.type==="checklist"?"Sjekkliste":"Tekst / video")+'</span>'+
         '<button class="btn danger small" onclick="delS('+mi+','+si+')">Fjern blokk</button></div>';
-      b+=inp("Overskrift","S."+mi+"."+si+".heading",s.heading);
+      b+=tx("Overskrift","S."+mi+"."+si+".heading",s.heading);
       if(s.type==="checklist"){
-        b+='<div class="field"><label>Punkter</label>';
-        (s.items||[]).forEach(function(it,ii){
+        var items=s.items&&!Array.isArray(s.items)?(s.items[EDLANG]||[]):[];
+        b+='<div class="field"><label>Punkter ('+EDLANG.toUpperCase()+')</label>';
+        items.forEach(function(it,ii){
           b+='<div style="display:flex;gap:8px;margin-bottom:8px">'+
             '<input class="input" value="'+esc(it)+'" oninput="setItem('+mi+','+si+','+ii+',this.value)"/>'+
             '<button class="btn ghost small" onclick="delItem('+mi+','+si+','+ii+')">✕</button></div>';
         });
         b+='<button class="btn ghost small" onclick="addItem('+mi+','+si+')">+ Legg til punkt</button></div>';
       }else{
-        b+=ta("Brødtekst","S."+mi+"."+si+".body",s.body);
-        b+=inp("Video — YouTube/Vimeo-lenke (valgfritt)","S."+mi+"."+si+".video",s.video);
+        b+=tarea("Brødtekst","S."+mi+"."+si+".body",s.body);
+        b+=inp("Video — YouTube/Vimeo-lenke","S."+mi+"."+si+".video",s.video,true);
       }
       b+='</div>';
     });
     b+='<div style="display:flex;gap:10px;margin-top:8px">'+
       '<button class="btn ghost small" onclick="addS('+mi+',\'text\')">+ Tekst / video</button>'+
-      '<button class="btn ghost small" onclick="addS('+mi+',\'checklist\')">+ Sjekkliste</button></div>';
-    b+='</div>';
+      '<button class="btn ghost small" onclick="addS('+mi+',\'checklist\')">+ Sjekkliste</button></div></div>';
   });
-  b+='<button class="btn" style="margin-top:12px" onclick="addM()">+ Ny veiledning</button>';
+  b+='<button class="btn" onclick="addM()">+ Ny veiledning</button>';
   document.getElementById("adminBody").innerHTML=b;
 }
+function t2(f){ if(f==null)return ""; if(typeof f==="string")return f; return f.en||f.no||f.de||""; }
+function setEdLang(l){ EDLANG=l; renderAdmin(); }
 
-function inp(label,path,val){
+function inp(label,path,val,plain){
   return '<div class="field"><label>'+esc(label)+'</label>'+
-    '<input class="input" value="'+esc(val)+'" oninput="setVal(\''+path+'\',this.value)"/></div>';
+    '<input class="input" value="'+esc(val)+'" oninput="setVal(\''+path+'\',this.value,'+(plain?'true':'false')+')"/></div>';
 }
-function ta(label,path,val){
-  return '<div class="field"><label>'+esc(label)+'</label>'+
-    '<textarea class="textarea" oninput="setVal(\''+path+'\',this.value)">'+esc(val)+'</textarea></div>';
+function tx(label,path,obj){
+  obj=obj&&typeof obj==="object"?obj:{};
+  return '<div class="field"><label>'+esc(label)+' ('+EDLANG.toUpperCase()+')</label>'+
+    '<input class="input" value="'+esc(obj[EDLANG]||"")+'" oninput="setVal(\''+path+'\',this.value,false)"/></div>';
 }
-function sel(label,path,val){
-  var opts=["key","wifi","flame","thermometer","compass","door","book"], o="";
+function tarea(label,path,obj){
+  obj=obj&&typeof obj==="object"?obj:{};
+  return '<div class="field"><label>'+esc(label)+' ('+EDLANG.toUpperCase()+')</label>'+
+    '<textarea class="textarea" oninput="setVal(\''+path+'\',this.value,false)">'+esc(obj[EDLANG]||"")+'</textarea></div>';
+}
+function selIcon(path,val){
+  var opts=["key","wifi","flame","thermometer","compass","door","book","water"],o="";
   opts.forEach(function(x){o+='<option value="'+x+'"'+(x===val?' selected':'')+'>'+x+'</option>';});
-  return '<div class="field"><label>'+esc(label)+'</label>'+
-    '<select class="select" onchange="setVal(\''+path+'\',this.value)">'+o+'</select></div>';
+  return '<div class="field"><label>Ikon</label><select class="select" onchange="setVal(\''+path+'\',this.value,true)">'+o+'</select></div>';
 }
 function row2(a,b){return '<div class="grid-2">'+a+b+'</div>';}
 
-function setVal(path,value){
-  if(path.indexOf("house.")===0){ WORK.house[path.split(".")[1]]=value; return; }
+// path-segmenter: house.X | contact.X | area.X | T.i.field | M.i.field | S.i.j.field
+function ref(path){
   var p=path.split(".");
-  if(p[0]==="M"){ WORK.manuals[+p[1]][p[2]]=value; }
-  else if(p[0]==="S"){ WORK.manuals[+p[1]].sections[+p[2]][p[3]]=value; }
+  if(p[0]==="house") return {o:WORK.house,k:p[1]};
+  if(p[0]==="contact") return {o:WORK.contact,k:p[1]};
+  if(p[0]==="area") return {o:WORK.area,k:p[1]};
+  if(p[0]==="T") return {o:WORK.area.trips[+p[1]],k:p[2]};
+  if(p[0]==="M") return {o:WORK.manuals[+p[1]],k:p[2]};
+  if(p[0]==="S") return {o:WORK.manuals[+p[1]].sections[+p[2]],k:p[3]};
+  return null;
 }
-function setItem(mi,si,ii,v){ WORK.manuals[mi].sections[si].items[ii]=v; }
-function addItem(mi,si){ WORK.manuals[mi].sections[si].items.push(""); renderAdmin(); }
-function delItem(mi,si,ii){ WORK.manuals[mi].sections[si].items.splice(ii,1); renderAdmin(); }
+function setVal(path,value,plain){
+  var r=ref(path); if(!r) return;
+  if(plain){ r.o[r.k]=value; }
+  else{
+    if(!r.o[r.k]||typeof r.o[r.k]!=="object"||Array.isArray(r.o[r.k])) r.o[r.k]=ml(r.o[r.k]);
+    r.o[r.k][EDLANG]=value;
+  }
+}
+function setItem(mi,si,ii,v){
+  var s=WORK.manuals[mi].sections[si];
+  if(!s.items||Array.isArray(s.items)) s.items={en:[],no:[],de:[]};
+  if(!s.items[EDLANG]) s.items[EDLANG]=[];
+  s.items[EDLANG][ii]=v;
+}
+function addItem(mi,si){
+  var s=WORK.manuals[mi].sections[si];
+  if(!s.items||Array.isArray(s.items)) s.items={en:[],no:[],de:[]};
+  LANGS.forEach(function(l){ if(!s.items[l])s.items[l]=[]; });
+  s.items[EDLANG].push(""); renderAdmin();
+}
+function delItem(mi,si,ii){
+  var s=WORK.manuals[mi].sections[si];
+  if(s.items&&s.items[EDLANG]) s.items[EDLANG].splice(ii,1);
+  renderAdmin();
+}
 function addM(){
   WORK.manuals.push({id:"ny-"+Math.random().toString(36).slice(2,7),icon:"book",
-    title:"Ny veiledning",summary:"Kort beskrivelse.",
-    sections:[{type:"text",heading:"Overskrift",body:"",video:""}]});
-  renderAdmin(); toast("Ny veiledning lagt til nederst");
+    title:{en:"New guide",no:"Ny veiledning",de:"Neue Anleitung"},summary:ml(),
+    sections:[{type:"text",heading:ml(),body:ml(),video:""}]});
+  renderAdmin(); toast("Ny veiledning lagt til");
 }
 function delM(i){ if(confirm("Slette denne veiledningen?")){ WORK.manuals.splice(i,1); renderAdmin(); } }
-function moveM(i,d){
-  var j=i+d; if(j<0||j>=WORK.manuals.length) return;
-  var t=WORK.manuals[i]; WORK.manuals[i]=WORK.manuals[j]; WORK.manuals[j]=t; renderAdmin();
-}
+function moveM(i,d){ var j=i+d; if(j<0||j>=WORK.manuals.length)return; var x=WORK.manuals[i];WORK.manuals[i]=WORK.manuals[j];WORK.manuals[j]=x; renderAdmin(); }
 function addS(mi,type){
-  var blk=type==="checklist"
-    ?{type:"checklist",heading:"Sjekkliste",items:[""]}
-    :{type:"text",heading:"",body:"",video:""};
-  WORK.manuals[mi].sections.push(blk); renderAdmin();
+  WORK.manuals[mi].sections.push(type==="checklist"
+    ?{type:"checklist",heading:ml(),items:{en:[""],no:[""],de:[""]}}
+    :{type:"text",heading:ml(),body:ml(),video:""});
+  renderAdmin();
 }
 function delS(mi,si){ WORK.manuals[mi].sections.splice(si,1); renderAdmin(); }
+function addTrip(){
+  WORK.area.trips.push({image:"",title:{en:"New place",no:"Nytt sted",de:"Neuer Ort"},text:ml(),mapUrl:""});
+  renderAdmin(); toast("Ny tur/sted lagt til");
+}
+function delTrip(i){ if(confirm("Slette denne turen/stedet?")){ WORK.area.trips.splice(i,1); renderAdmin(); } }
+function moveTrip(i,d){ var j=i+d; if(j<0||j>=WORK.area.trips.length)return; var x=WORK.area.trips[i];WORK.area.trips[i]=WORK.area.trips[j];WORK.area.trips[j]=x; renderAdmin(); }
 
 function downloadData(){
   var header=
 "// ════════════════════════════════════════════════════════════\n"+
-"//  VILLAEN I ALSVIK — INNHOLD\n"+
-"//  Generert fra admin-panelet. Legg denne filen opp på GitHub\n"+
+"//  VILLAEN I ALSVIK — INNHOLD (en/no/de)\n"+
+"//  Generert fra admin. Legg denne filen opp på GitHub\n"+
 "//  (erstatt den gamle data.js). Siden oppdateres på ~30 sek.\n"+
 "// ════════════════════════════════════════════════════════════\n\n"+
 "window.VILLA_DATA = ";
-  var body=JSON.stringify(WORK,null,2);
-  var blob=new Blob([header+body+";\n"],{type:"text/javascript"});
+  var blob=new Blob([header+JSON.stringify(WORK,null,2)+";\n"],{type:"text/javascript"});
   var a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="data.js";
+  a.href=URL.createObjectURL(blob); a.download="data.js";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   toast("data.js lastet ned — legg den opp på GitHub");
 }
 
-renderHome();
+render();
 initReveal();
 </script>
 </body>
