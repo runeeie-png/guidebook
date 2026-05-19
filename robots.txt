@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /g-02t6ds290s80ltvo/
+
+Sitemap: https://preikestolenvilla.com/sitemap.xml
