@@ -262,6 +262,7 @@ var villaData = null, villaOrig = null;
 var guidebookData = null, guidebookOrig = null;
 var imageList = { bilder: [], guidebook: [] };
 var activeTab = "villa";
+var currentGuidebookLang = "en";  // hvilket språk man redigerer i guidebook-fanen
 var dirty = false;
 
 // ─── DOM helpers ──────────────────────────────────────────────────
@@ -727,7 +728,8 @@ function renderGallery(){
     el("h2", null, "Gallery photos"),
     el("p", { class: "help" },
       "Drag-and-drop order with ▲ / ▼ buttons. Set room type and description. Toggle Show/Hide to publish or temporarily hide a photo. " +
-      "To add new photos: upload the .jpg file (and an optional thumbnail named foo-t.jpg) to the bilder/ folder on GitHub, then click '+ Refresh from folder'."
+      "To add new photos: upload the .jpg file (and an optional thumbnail named foo-t.jpg) to the bilder/ folder on GitHub. " +
+      "After Vercel re-deploys (~30 sec), click '+ Refresh from folder' to see them here."
     )
   ]);
 
@@ -872,49 +874,74 @@ function renderGuidebook(){
   d.area = d.area || { trips: [] };
   d.manuals = d.manuals || [];
 
-  pane.appendChild(el("div", { class: "section" }, [
-    el("h2", null, "Guidebook — for guests"),
-    el("p", { class: "help" }, "Three languages: English, Norwegian, German. Edit each language separately. The Lysefjord URL: " +
-      el("strong", null, location.origin + "/villa-guide-9k2m7p").outerHTML).innerHTML ? null : null
-  ]));
-  // Actually build the help message safer
-  pane.lastChild.innerHTML = "<h2>Guidebook — for guests</h2><p class='help'>This is the private guest guidebook (the URL is <code>" + location.origin + "/villa-guide-9k2m7p</code>). It's not indexed by search engines and only shared with confirmed guests. All text fields support three languages: <strong>en</strong> (English), <strong>no</strong> (Norsk), <strong>de</strong> (Deutsch).</p>";
+  // Header med språkvelger
+  var header = el("div", { class: "section" });
+  header.innerHTML =
+    "<h2>Guidebook — for guests</h2>" +
+    "<p class='help' style='margin-bottom:18px'>This is the private guest guidebook (URL: <code>" + location.origin + "/villa-guide-9k2m7p</code>). " +
+    "Not indexed by search engines. Choose a language below to edit it — switching languages doesn't lose changes.</p>";
+
+  // Language switcher
+  var langBar = el("div", {
+    style: "display:flex;gap:0;background:#f0ede5;padding:4px;border-radius:6px;width:fit-content"
+  });
+  var langs = [
+    { code: "en", label: "English" },
+    { code: "no", label: "Norsk" },
+    { code: "de", label: "Deutsch" }
+  ];
+  langs.forEach(function(l){
+    var b = el("button", {
+      style:
+        "border:none;padding:8px 18px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;" +
+        (currentGuidebookLang === l.code
+          ? "background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.06)"
+          : "background:transparent;color:var(--muted)"),
+      onclick: function(){
+        currentGuidebookLang = l.code;
+        renderGuidebook();
+      }
+    }, l.label);
+    langBar.appendChild(b);
+  });
+  header.appendChild(langBar);
+  pane.appendChild(header);
 
   // Settings
   pane.appendChild(el("div", { class: "section" }, [
     el("h2", null, "Settings"),
-    selectRow("Default language", "Language shown when guest opens the page", d.defaultLang, [
+    selectRow("Default language", "Language shown when a guest first opens the page", d.defaultLang, [
       { value: "en", label: "English" }, { value: "no", label: "Norsk" }, { value: "de", label: "Deutsch" }
     ], function(v){ d.defaultLang = v; }),
   ]));
 
-  // Helper: 3-language input row
+  // Helper: enkelt-språk-input som bare viser currentGuidebookLang
   function langRow(label, obj, key, textarea){
     obj[key] = obj[key] || { en: "", no: "", de: "" };
     var v = obj[key];
-    var make = function(lang, ph){
-      var n;
-      if(textarea){
-        n = el("textarea", { placeholder: ph }, v[lang] || "");
-      } else {
-        n = el("input", { type: "text", placeholder: ph, value: v[lang] || "" });
-      }
-      n.oninput = function(){ v[lang] = n.value; setDirty(true); };
-      n.style.cssText = (textarea ? "min-height:60px;" : "") + "width:100%;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:#fafaf8";
-      return n;
-    };
-    var triple = el("div", { style: "display:flex;flex-direction:column;gap:6px" }, [
-      el("div", { style: "display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center" }, [
-        el("span", { style: "font-size:11px;color:#999;font-weight:500" }, "EN"), make("en", "English")
-      ]),
-      el("div", { style: "display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center" }, [
-        el("span", { style: "font-size:11px;color:#999;font-weight:500" }, "NO"), make("no", "Norsk")
-      ]),
-      el("div", { style: "display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center" }, [
-        el("span", { style: "font-size:11px;color:#999;font-weight:500" }, "DE"), make("de", "Deutsch")
-      ])
-    ]);
-    return el("div", { class: "row" }, [el("label", null, label), triple]);
+    var lng = currentGuidebookLang;
+    var n;
+    if(textarea){
+      n = el("textarea", null, v[lng] || "");
+      n.style.minHeight = "70px";
+    } else {
+      n = el("input", { type: "text", value: v[lng] || "" });
+    }
+    n.oninput = function(){ v[lng] = n.value; setDirty(true); };
+    n.style.width = "100%";
+    n.style.fontSize = "14px";
+    n.style.padding = "9px 12px";
+    n.style.border = "1px solid var(--line)";
+    n.style.borderRadius = "4px";
+    n.style.background = "#fafaf8";
+    // Vis hint om andre språk har innhold
+    var otherLangs = ["en","no","de"].filter(function(x){ return x !== lng && v[x]; });
+    var hint = otherLangs.length
+      ? el("small", { style: "color:var(--muted);font-size:11px;display:block;margin-top:4px;font-style:italic" },
+          "Also filled in: " + otherLangs.join(", ").toUpperCase())
+      : null;
+    var wrap = el("div", null, hint ? [n, hint] : [n]);
+    return el("div", { class: "row" }, [el("label", null, label), wrap]);
   }
 
   // House
@@ -969,12 +996,19 @@ function renderGuidebook(){
         el("span", { style: "color:#999;width:60px" }, "Image:"), imgPick
       ]));
       ["en","no","de"].forEach(function(lng){
-        var t = el("input", { type: "text", placeholder: "Title ("+lng.toUpperCase()+")", value: trip.title[lng] || "" });
+        if(lng !== currentGuidebookLang) return;  // bare aktivt språk
+        var t = el("input", { type: "text", placeholder: "Title", value: trip.title[lng] || "" });
         t.oninput = function(){ trip.title[lng] = t.value; onChange(); };
         body.appendChild(t);
-        var x = el("textarea", { placeholder: "Body ("+lng.toUpperCase()+")" }, trip.text[lng] || "");
+        var x = el("textarea", { placeholder: "Body" }, trip.text[lng] || "");
         x.oninput = function(){ trip.text[lng] = x.value; onChange(); };
         body.appendChild(x);
+        // Vis hint hvis andre språk har innhold
+        var others = ["en","no","de"].filter(function(o){ return o !== lng && (trip.title[o] || trip.text[o]); });
+        if(others.length){
+          body.appendChild(el("small", { style: "color:var(--muted);font-size:11px;font-style:italic" },
+            "Also filled in: " + others.join(", ").toUpperCase()));
+        }
       });
       var url = el("input", { type: "text", placeholder: "Google Maps URL", value: trip.mapUrl || "" });
       url.oninput = function(){ trip.mapUrl = url.value; onChange(); };
@@ -995,12 +1029,18 @@ function renderGuidebook(){
       function(man, body, onChange){
         ["title", "text"].forEach(function(f){ man[f] = man[f] || { en:"",no:"",de:"" }; });
         ["en","no","de"].forEach(function(lng){
-          var t = el("input", { type: "text", placeholder: "Title ("+lng.toUpperCase()+")", value: man.title[lng] || "" });
+          if(lng !== currentGuidebookLang) return;
+          var t = el("input", { type: "text", placeholder: "Title", value: man.title[lng] || "" });
           t.oninput = function(){ man.title[lng] = t.value; onChange(); };
           body.appendChild(t);
-          var x = el("textarea", { placeholder: "Instructions ("+lng.toUpperCase()+")" }, man.text[lng] || "");
+          var x = el("textarea", { placeholder: "Instructions" }, man.text[lng] || "");
           x.oninput = function(){ man.text[lng] = x.value; onChange(); };
           body.appendChild(x);
+          var others = ["en","no","de"].filter(function(o){ return o !== lng && (man.title[o] || man.text[o]); });
+          if(others.length){
+            body.appendChild(el("small", { style: "color:var(--muted);font-size:11px;font-style:italic" },
+              "Also filled in: " + others.join(", ").toUpperCase()));
+          }
         });
         var v = el("input", { type: "text", placeholder: "Video URL (YouTube/Vimeo — optional)", value: man.video || "" });
         v.oninput = function(){ man.video = v.value; onChange(); };
