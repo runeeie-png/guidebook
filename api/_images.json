@@ -1,0 +1,180 @@
+{
+  "bilder": {
+    "count": 24,
+    "items": [
+      {
+        "file": "fjord-dag",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "fjord-dag.jpg"
+      },
+      {
+        "file": "fjord-solned",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "fjord-solned.jpg"
+      },
+      {
+        "file": "hage-badestamp2",
+        "ext": "JPG",
+        "hasThumb": false,
+        "fullName": "hage-badestamp2.JPG"
+      },
+      {
+        "file": "hage-drivhus2",
+        "ext": "JPG",
+        "hasThumb": false,
+        "fullName": "hage-drivhus2.JPG"
+      },
+      {
+        "file": "kj#U00f8kken-bord2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "kj#U00f8kken-bord2.jpg"
+      },
+      {
+        "file": "kj#U00f8kken-peis2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "kj#U00f8kken-peis2.jpg"
+      },
+      {
+        "file": "kjokken",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "kjokken.jpg"
+      },
+      {
+        "file": "natur",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "natur.jpg"
+      },
+      {
+        "file": "omrade",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "omrade.jpg"
+      },
+      {
+        "file": "solnedgang",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "solnedgang.jpg"
+      },
+      {
+        "file": "soverom-loft2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "soverom-loft2.jpg"
+      },
+      {
+        "file": "soverom-soverom4",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "soverom-soverom4.jpg"
+      },
+      {
+        "file": "spisestue",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "spisestue.jpg"
+      },
+      {
+        "file": "stue-kjellerstue2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-kjellerstue2.jpg"
+      },
+      {
+        "file": "stue-loft2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-loft2.jpg"
+      },
+      {
+        "file": "stue-loftsstue",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-loftsstue.jpg"
+      },
+      {
+        "file": "stue-loftstue 1",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-loftstue 1.jpg"
+      },
+      {
+        "file": "stue-loftstue2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-loftstue2.jpg"
+      },
+      {
+        "file": "stue-lys",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "stue-lys.jpg"
+      },
+      {
+        "file": "stue-peis",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "stue-peis.jpg"
+      },
+      {
+        "file": "stue-stue1",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-stue1.jpg"
+      },
+      {
+        "file": "stue-vinkjeller2",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "stue-vinkjeller2.jpg"
+      },
+      {
+        "file": "villa-hage",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "villa-hage.jpg"
+      },
+      {
+        "file": "villa-utsikt",
+        "ext": "jpg",
+        "hasThumb": true,
+        "fullName": "villa-utsikt.jpg"
+      }
+    ]
+  },
+  "villa-guide-9k2m7p": {
+    "count": 4,
+    "items": [
+      {
+        "file": "area",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "area.jpg"
+      },
+      {
+        "file": "hero",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "hero.jpg"
+      },
+      {
+        "file": "house",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "house.jpg"
+      },
+      {
+        "file": "preikestolen",
+        "ext": "jpg",
+        "hasThumb": false,
+        "fullName": "preikestolen.jpg"
+      }
+    ]
+  }
+}
