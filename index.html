@@ -294,8 +294,8 @@
   /* BOOKING */
   .booking{padding:90px 0 110px;background:var(--paper)}
   .widget-frame{background:var(--paper);
-    max-width:480px;margin:0 auto;text-align:center}
-  #booking-iframe{display:block;width:100%;max-width:480px;
+    max-width:560px;margin:0 auto;text-align:center}
+  #booking-iframe{display:block;width:100%;min-width:320px;min-height:900px;
     margin:0 auto;border:0;background:var(--paper)}
 
   .footer{background:var(--stone-900);color:rgba(236,233,225,.6);
@@ -813,7 +813,8 @@
         <p id="dBookIntro">Check available dates and book directly below — no booking fees, no platform commissions.</p>
       </div>
       <div class="widget-frame">
-        <iframe id="booking-iframe" sandbox="allow-top-navigation allow-scripts allow-same-origin" style="width: 100%; height: 680px" frameborder="0" src="https://booking.hospitable.com/widget/a1cf5d0f-7601-4e46-ba28-2e6a2032511c/2234958"></iframe>
+        <script>window.addEventListener("message",function(e){if(e&&e.data){window.parent.postMessage(e.data,"*");}});</script>
+        <iframe id="booking-iframe" sandbox="allow-top-navigation allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" style="width: 100%; height: 900px" frameborder="0" src="https://booking.hospitable.com/widget/a1cf5d0f-7601-4e46-ba28-2e6a2032511c/2234958"></iframe>
       </div>
     </div>
   </section>
