@@ -1,6 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/*.js": {
+      "includeFiles": "api/*.json"
+    }
+  },
   "headers": [
     {
       "source": "/villa-guide-9k2m7p/(.*)",

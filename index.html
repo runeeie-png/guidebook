@@ -1031,7 +1031,7 @@
       setText("dBookTitleEm", d.booking.title_em);
       setText("dBookTitlePost", d.booking.title_post);
       setText("dBookIntro", d.booking.intro);
-      if(d.booking.iframeUrl){
+      if(d.booking.iframeUrl && /^https?:\/\//.test(d.booking.iframeUrl)){
         var fr = $("booking-iframe");
         if(fr && fr.src !== d.booking.iframeUrl) fr.src = d.booking.iframeUrl;
       }
