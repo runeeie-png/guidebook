@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /villa-guide-9k2m7p/
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://preikestolenvilla.com/sitemap.xml

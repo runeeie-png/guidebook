@@ -1,0 +1,10 @@
+{
+  "name": "preikestolen-villa",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Preikestolen Villa — front page and guest guidebook with Redis-backed CMS.",
+  "dependencies": {
+    "@upstash/redis": "^1.34.3"
+  }
+}
