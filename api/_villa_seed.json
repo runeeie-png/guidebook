@@ -1,0 +1,490 @@
+{
+  "hero": {
+    "coords": "N 59°00′  ·  E 6°16′",
+    "eyebrow": "Ryfylke · Norway",
+    "title_pre": "Preikestolen ",
+    "title_em": "Villa",
+    "tagline": "A quiet retreat by the fjord, in the heart of Ryfylke",
+    "soonLabel": "Now available for booking",
+    "cta1": "View the villa",
+    "cta2": "Check availability",
+    "scrollLabel": "Scroll to enter"
+  },
+  "bleed": {
+    "image": "villa-utsikt.jpg",
+    "caption": "Looking down toward the villa — from the top of the garden."
+  },
+  "gallery": {
+    "chapter": "Chapter I",
+    "kicker": "The villa",
+    "title_pre": "A home ",
+    "title_em": "above the fjord",
+    "intro": "Light-filled rooms, a garden among old oaks, and the Lysefjord stretching out below.",
+    "galleryLimit": 9
+  },
+  "galleryPhotos": [
+    {
+      "file": "villa-hage",
+      "ext": "jpg",
+      "room": "Exterior & garden",
+      "tall": false,
+      "show": true,
+      "desc": "The villa seen through the garden gate, framed by ancient oaks."
+    },
+    {
+      "file": "villa-utsikt",
+      "ext": "jpg",
+      "room": "Exterior & garden",
+      "tall": true,
+      "show": true,
+      "desc": "The villa and its manicured garden."
+    },
+    {
+      "file": "hage-badestamp2",
+      "ext": "JPG",
+      "room": "Exterior & garden",
+      "tall": false,
+      "show": true,
+      "desc": "The wood-fired hot tub in the garden."
+    },
+    {
+      "file": "hage-drivhus2",
+      "ext": "JPG",
+      "room": "Exterior & garden",
+      "tall": false,
+      "show": true,
+      "desc": "The greenhouse in the garden."
+    },
+    {
+      "file": "stue-peis",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The main living room with fireplace."
+    },
+    {
+      "file": "stue-lys",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "Bright, light-filled lounge."
+    },
+    {
+      "file": "stue-stue1",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The living room."
+    },
+    {
+      "file": "stue-kjellerstue2",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The lower-level lounge."
+    },
+    {
+      "file": "stue-loft2",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The loft lounge."
+    },
+    {
+      "file": "stue-loftsstue",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The loft sitting area."
+    },
+    {
+      "file": "stue-loftstue2",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The loft lounge."
+    },
+    {
+      "file": "stue-vinkjeller2",
+      "ext": "jpg",
+      "room": "Living areas",
+      "tall": false,
+      "show": true,
+      "desc": "The wine cellar."
+    },
+    {
+      "file": "kjokken",
+      "ext": "jpg",
+      "room": "Kitchen & dining",
+      "tall": false,
+      "show": true,
+      "desc": "Fully equipped kitchen."
+    },
+    {
+      "file": "kjøkken-bord2",
+      "ext": "jpg",
+      "room": "Kitchen & dining",
+      "tall": false,
+      "show": true,
+      "desc": "The kitchen dining table."
+    },
+    {
+      "file": "kjøkken-peis2",
+      "ext": "jpg",
+      "room": "Kitchen & dining",
+      "tall": false,
+      "show": true,
+      "desc": "The kitchen with fireplace."
+    },
+    {
+      "file": "spisestue",
+      "ext": "jpg",
+      "room": "Kitchen & dining",
+      "tall": false,
+      "show": true,
+      "desc": "Dining area with seating for the whole family."
+    },
+    {
+      "file": "soverom",
+      "ext": "jpg",
+      "room": "Bedrooms",
+      "tall": true,
+      "show": true,
+      "desc": "One of the five bedrooms."
+    },
+    {
+      "file": "soverom-loft2",
+      "ext": "jpg",
+      "room": "Bedrooms",
+      "tall": false,
+      "show": true,
+      "desc": "The loft bedroom."
+    },
+    {
+      "file": "soverom-soverom4",
+      "ext": "jpg",
+      "room": "Bedrooms",
+      "tall": false,
+      "show": true,
+      "desc": "One of the bedrooms."
+    },
+    {
+      "file": "fjord-solned",
+      "ext": "jpg",
+      "room": "Surroundings",
+      "tall": false,
+      "show": true,
+      "desc": "Sunset over the Lysefjord, just below the property."
+    },
+    {
+      "file": "solnedgang",
+      "ext": "jpg",
+      "room": "Surroundings",
+      "tall": false,
+      "show": true,
+      "desc": "Evening light across the fjord."
+    },
+    {
+      "file": "fjord-dag",
+      "ext": "jpg",
+      "room": "Surroundings",
+      "tall": false,
+      "show": true,
+      "desc": "The fjord in daylight."
+    },
+    {
+      "file": "omrade",
+      "ext": "jpg",
+      "room": "Surroundings",
+      "tall": false,
+      "show": true,
+      "desc": "The area seen from above."
+    },
+    {
+      "file": "natur",
+      "ext": "jpg",
+      "room": "Surroundings",
+      "tall": true,
+      "show": true,
+      "desc": "The surrounding nature and walking paths."
+    }
+  ],
+  "galleryRooms": [
+    "Exterior & garden",
+    "Living areas",
+    "Kitchen & dining",
+    "Bedrooms",
+    "Surroundings"
+  ],
+  "about": {
+    "chapter": "Chapter II",
+    "kicker": "The space",
+    "title_pre": "Where ",
+    "title_em": "family memories",
+    "title_post": " are made",
+    "hook": "Gather your whole family on 4,000 m² of private garden — sauna, hot tub under the stars, a boat and ancient oaks. Room to be together, space to breathe apart.",
+    "blocks": [
+      {
+        "heading": "The space",
+        "text": "Preikestolen Villa is a spacious private villa for families and groups who want to experience Rogaland properly — with room to breathe, genuine privacy, and everything you need for an unforgettable stay. Set on approximately 4,000 m² of land with manicured gardens, ancient oak trees, a greenhouse, a stream, and multiple outdoor areas. Plenty of space to be together — and room to find your own corner of quiet."
+      },
+      {
+        "heading": "Highlights",
+        "items": [
+          "Wood-fired Skargards Regal 220 hot tub (8–10 guests)",
+          "Private sauna",
+          "Fire barrel and three indoor fireplaces",
+          "Fully equipped kitchen with dining for 12",
+          "Loft lounge with 65\" TV + additional TV on main floor",
+          "Five bedrooms + loft",
+          "14-foot boat with 9.9 hp motor (April–November, by arrangement)",
+          "Large garden with terraces, seating areas and stream"
+        ]
+      },
+      {
+        "heading": "Sleeping arrangements",
+        "text": "Comfortable beds for 12 adults in standard bedrooms. With additional sleeping options, up to 15 guests can be accommodated in total.",
+        "heading2": "Location",
+        "text2": "Quiet neighbourhood with minimal traffic and excellent privacy — just 25 minutes from Preikestolen and the Lysefjord."
+      },
+      {
+        "heading": "Best suited for",
+        "text": "Family holidays, multi-generational trips, groups of friends, and work retreats needing space and tranquility. This villa is best suited for guests who value peace, nature and quality time together — not for events or parties."
+      },
+      {
+        "heading": "Guest access",
+        "text": "Guests have full and private access to the entire villa, including the garden, terrace and all outdoor areas. Only a few storage rooms and the garage are locked and not available during the stay."
+      }
+    ]
+  },
+  "reviews": {
+    "kicker": "5.0 ★ on Airbnb",
+    "chapter": "Reviews",
+    "items": [
+      {
+        "text": "The property is even more impressive in real life — peaceful, private, surrounded by nature, and perfectly designed for relaxing and spending quality time together. The house has a warm and luxurious atmosphere while still feeling",
+        "em": " cozy and welcoming.",
+        "cite": "— Max, May 2026"
+      },
+      {
+        "text": "An amazing house in a peaceful location, with beautiful views and within easy reach of the Pulpit Rock hiking trail. The hosts went above and beyond to ensure we had a comfortable stay. The sauna has the",
+        "em": " most perfect ratio of size to heater power.",
+        "cite": "— Elena, group of 11, May 2026"
+      },
+      {
+        "text": "You can immediately see that the owners love their house — everything is selected to the smallest detail. It was comfortable for our large group of 13. The children loved the hot tub.",
+        "em": " That's our 100% recommendation.",
+        "cite": "— A guest, April 2026"
+      },
+      {
+        "text": "Einfach wunderschön. Stilvoll, gemütlich und bis ins jede Detail durchdacht eingerichtet.",
+        "em": " Niemand wollte am letzten Tag abreisen.",
+        "cite": "— Three families, Easter 2026 · German",
+        "lang": "de",
+        "translation": "Simply beautiful. Stylish, cozy, considered down to the smallest detail. No one wanted to leave on the last day."
+      },
+      {
+        "text": "Stort, flot og rummeligt, og vi nød aftener med spil, grin og hygge",
+        "em": " foran pejsen.",
+        "cite": "— Two families, October 2025 · Danish",
+        "lang": "da",
+        "translation": "Large, beautiful and spacious — we loved the evenings of games, laughter and hygge by the fireplace."
+      }
+    ]
+  },
+  "amenities": {
+    "chapter": "Chapter III",
+    "kicker": "Amenities",
+    "title_pre": "Every detail, ",
+    "title_em": "considered",
+    "showMore": "Show all amenities",
+    "showLess": "Show fewer amenities",
+    "highlights": [
+      "Wood-fired hot tub — 24h, year-round",
+      "Private sauna",
+      "Waterfront on the Lysefjord",
+      "14-foot boat with motor (Apr–Nov)",
+      "Three indoor fireplaces & fire pit",
+      "Fully equipped kitchen, dining for 12",
+      "Free parking & EV charger",
+      "Pets welcome"
+    ],
+    "categories": [
+      {
+        "heading": "Parking & facilities",
+        "items": [
+          "Free parking on premises",
+          "Private hot tub — 24h, year-round",
+          "Private sauna",
+          "EV charger — level 2"
+        ]
+      },
+      {
+        "heading": "Outdoor",
+        "items": [
+          "Private patio or balcony",
+          "Private backyard",
+          "Fire pit",
+          "Outdoor furniture",
+          "Outdoor dining area",
+          "BBQ grill",
+          "Sun loungers"
+        ]
+      },
+      {
+        "heading": "Location features",
+        "items": [
+          "Waterfront",
+          "Lake access",
+          "Private entrance"
+        ]
+      },
+      {
+        "heading": "Kitchen & dining",
+        "items": [
+          "Full kitchen",
+          "Gaggenau stainless steel oven",
+          "Refrigerator, freezer & mini fridge",
+          "Dishwasher",
+          "Electric stove",
+          "Cooking basics, dishes & silverware",
+          "Coffee maker, espresso & kettle",
+          "Toaster, blender, rice maker",
+          "Baking sheet, wine glasses",
+          "Dining table"
+        ]
+      },
+      {
+        "heading": "Bedroom & laundry",
+        "items": [
+          "Washer & free dryer (in unit)",
+          "Essentials & cotton bed linens",
+          "Extra pillows & blankets",
+          "Hangers & closet storage",
+          "Iron & drying rack"
+        ]
+      },
+      {
+        "heading": "Bathroom",
+        "items": [
+          "Bathtub",
+          "Hair dryer",
+          "Cleaning products",
+          "Hot water"
+        ]
+      },
+      {
+        "heading": "Heating & cooling",
+        "items": [
+          "Indoor fireplace",
+          "Heating",
+          "Air conditioning"
+        ]
+      },
+      {
+        "heading": "Entertainment",
+        "items": [
+          "TV",
+          "Bluetooth sound system",
+          "Books & reading material",
+          "Board games",
+          "Exercise equipment"
+        ]
+      },
+      {
+        "heading": "Family",
+        "items": [
+          "Crib & travel crib",
+          "Standalone high chair",
+          "Children's books & toys",
+          "Children's dinnerware",
+          "Outdoor playground"
+        ]
+      },
+      {
+        "heading": "Internet & office",
+        "items": [
+          "Wifi",
+          "Ethernet connection",
+          "Dedicated workspace"
+        ]
+      },
+      {
+        "heading": "Home safety",
+        "items": [
+          "Smoke alarm",
+          "Fire extinguisher",
+          "First aid kit",
+          "Fireplace & window guards"
+        ]
+      },
+      {
+        "heading": "Services",
+        "items": [
+          "Self check-in with keypad",
+          "Luggage dropoff allowed",
+          "Pets allowed"
+        ]
+      }
+    ]
+  },
+  "location": {
+    "chapter": "Chapter IV",
+    "kicker": "The region",
+    "title_pre": "A region that ",
+    "title_em": "does the heavy lifting",
+    "intro": "You don't have to plan much. The dramatic part of Norway begins at the end of the driveway — and you're rarely more than half an hour from one of the country's most extraordinary places.",
+    "distances": [
+      {
+        "place": "Preikestolen (Pulpit Rock) trailhead",
+        "dist": "25 min"
+      },
+      {
+        "place": "Lysefjord cruise quay",
+        "dist": "30 min"
+      },
+      {
+        "place": "Stavanger city centre",
+        "dist": "30 min"
+      },
+      {
+        "place": "Stavanger airport (SVG)",
+        "dist": "40 min"
+      },
+      {
+        "place": "Manafossen waterfall",
+        "dist": "2 h"
+      },
+      {
+        "place": "Kjerag parking (summer)",
+        "dist": "3 h"
+      }
+    ]
+  },
+  "booking": {
+    "chapter": "Reserve",
+    "kicker": "Direct booking",
+    "title_pre": "Book ",
+    "title_em": "directly",
+    "title_post": ", straight with the owner",
+    "intro": "Check available dates and book directly below — no booking fees, no platform commissions.",
+    "iframeUrl": "https://booking.hospitable.com/widget/a1cf5d0f-7601-4e46-ba28-2e6a2032511c/2234958"
+  },
+  "sticky": {
+    "text": "Reserve your stay",
+    "em": "— direct, no fees",
+    "cta": "Check dates"
+  },
+  "footer": {
+    "title": "Preikestolen Villa — Ryfylke, Norway",
+    "email": "booking@preikestolenvilla.com",
+    "emailPrefix": "Enquiries: "
+  }
+}
