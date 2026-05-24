@@ -119,10 +119,17 @@
   .trip-body{padding:28px;display:flex;flex-direction:column;flex:1}
   .trip-body h3{font-size:1.4rem}
   .trip-body p{margin-top:12px;color:var(--muted);font-size:15px;flex:1}
-  .trip-map{margin-top:20px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--moss);display:inline-flex;align-items:center;gap:8px}
-  .trip-map::before{content:"";width:14px;height:14px;border:1.5px solid var(--moss);
-    border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:inline-block}
+  .trip-map{margin-top:18px;display:inline-flex;align-items:center;gap:10px;
+    padding:10px 14px;background:rgba(91,107,84,.07);border:1px solid rgba(91,107,84,.18);
+    border-radius:3px;text-decoration:none;color:var(--moss-deep);
+    transition:background .2s, border-color .2s;max-width:100%}
+  .trip-map:hover{background:rgba(91,107,84,.13);border-color:rgba(91,107,84,.35)}
+  .trip-map .pin{flex:0 0 16px;width:16px;height:16px;color:var(--moss)}
+  .trip-map .pin svg{width:100%;height:100%;display:block}
+  .trip-map .label{font-size:14px;font-weight:500;color:var(--ink);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:24ch}
+  .trip-map .cta{font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--moss);padding-left:8px;border-left:1px solid rgba(91,107,84,.25);margin-left:4px}
 
   .manual-page{padding:140px 0 130px;display:none}
   .manual-page.active{display:block}
@@ -139,6 +146,18 @@
   .m-video{margin:26px 0 6px;width:100%;aspect-ratio:16/9;background:var(--stone-900);
     border-radius:2px;overflow:hidden}
   .m-video iframe,.m-video video{width:100%;height:100%;border:0;object-fit:cover}
+  .m-video-thumb{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:filter .2s}
+  .m-video-thumb::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18);
+    transition:background .2s}
+  .m-video-thumb:hover::after,.m-video-thumb:focus::after{background:rgba(0,0,0,.08)}
+  .m-video-thumb:focus{outline:2px solid var(--linen);outline-offset:-4px}
+  .m-play{position:relative;z-index:1;display:grid;place-items:center;width:72px;height:72px;
+    border-radius:50%;background:rgba(255,255,255,.94);color:var(--stone-900);
+    box-shadow:0 6px 24px rgba(0,0,0,.35);
+    transition:transform .2s, background .2s}
+  .m-video-thumb:hover .m-play{transform:scale(1.06);background:#fff}
+  .m-play svg{margin-left:4px} /* nudge play icon visually centered */
   .m-check{list-style:none;margin-top:8px}
   .m-check li{padding:16px 0 16px 38px;position:relative;
     border-bottom:1px solid rgba(0,0,0,.08);font-size:17px}
@@ -409,6 +428,33 @@ var ICONS={
 function iconSvg(n){return '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[n]||ICONS.book)+'</svg>';}
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
+// Extract a human-readable place label from a Google Maps URL so we can
+// show "Preikestolen" next to the pin instead of a bare "Open in maps".
+// Returns "" when the URL is shortened (maps.app.goo.gl) or unparseable.
+function parseMapLabel(url){
+  if(!url) return "";
+  var s = String(url).trim();
+  if(!/^https?:\/\//i.test(s)) return "";
+  if(/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(s)) return ""; // shortened
+  // /maps/place/<name>/...
+  var pm = s.match(/\/maps\/place\/([^\/?@]+)/i);
+  if(pm){
+    try { return decodeURIComponent(pm[1]).replace(/\+/g," ").trim(); }
+    catch(e){ return pm[1].replace(/\+/g," "); }
+  }
+  // ?q=<query>
+  var qm = s.match(/[?&]q=([^&#]+)/i);
+  if(qm){
+    var q;
+    try { q = decodeURIComponent(qm[1]); } catch(e){ q = qm[1]; }
+    q = q.replace(/\+/g," ").trim();
+    // Don't show bare coordinates as a label — let the "Open in maps" CTA carry it
+    if(/^-?\d+\.\d+\s*,\s*-?\d+\.\d+$/.test(q)) return "";
+    return q;
+  }
+  return "";
+}
+
 function render(){
   try{
     document.documentElement.lang=LANG;
@@ -462,7 +508,17 @@ function render(){
       tg+='<div class="trip">';
       if(tr.image) tg+='<div class="trip-img"><img src="'+esc(tr.image)+'" alt=""></div>';
       tg+='<div class="trip-body"><h3>'+esc(t(tr.title))+'</h3><p>'+esc(t(tr.text))+'</p>';
-      if(tr.mapUrl) tg+='<a class="trip-map" href="'+esc(tr.mapUrl)+'" target="_blank" rel="noopener">'+ui("map")+'</a>';
+      if(tr.mapUrl){
+        var pinSvg = '<span class="pin" aria-hidden="true">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+
+          '<path d="M12 21s-7-7.5-7-12a7 7 0 0 1 14 0c0 4.5-7 12-7 12Z"/>'+
+          '<circle cx="12" cy="9" r="2.5"/></svg></span>';
+        var label = parseMapLabel(tr.mapUrl);
+        var labelHtml = label ? '<span class="label">'+esc(label)+'</span>' : '';
+        tg+='<a class="trip-map" href="'+esc(tr.mapUrl)+'" target="_blank" rel="noopener">'+
+            pinSvg + labelHtml +
+            '<span class="cta">'+ui("map")+'</span></a>';
+      }
       tg+='</div></div>';
     });
     document.getElementById("tripsGrid").innerHTML=tg;
@@ -479,16 +535,59 @@ function fact(k,v){return '<div class="fact"><div class="k">'+esc(k)+'</div><div
 
 function setLang(l){ if(LANGS.indexOf(l)>=0){ LANG=l; render(); if(document.getElementById("manualPage").classList.contains("active")){ var id=document.getElementById("manualPage").getAttribute("data-mid"); if(id) openManual(id); } } }
 
+// Returns a video block as a clickable thumbnail (cheap to render, no
+// iframe loaded until the user actually clicks). Clicking swaps the
+// thumbnail for the real embed.
 function videoHtml(url){
   if(!url) return "";
-  var yt=url.match(/[?&]v=([^&]+)/)||url.match(/youtu\.be\/([^?]+)/)||url.match(/youtube\.com\/embed\/([^?]+)/);
-  if(/youtube\.com|youtu\.be/.test(url)&&yt){
-    return '<div class="m-video"><iframe src="https://www.youtube.com/embed/'+encodeURIComponent(yt[1])+
-      '" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
+  var ytId = null, vmId = null, kind = null;
+  // YouTube long (?v=), short (youtu.be/), embed, /v/, /shorts/
+  var ym = url.match(/(?:youtube\.com\/(?:watch\?[^#]*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_\-]{6,})/);
+  if(ym){ ytId = ym[1]; kind = "yt"; }
+  if(!ytId){
+    var vm = url.match(/vimeo\.com\/(?:video\/)?(\d{4,})/);
+    if(vm){ vmId = vm[1]; kind = "vm"; }
   }
-  var vm=url.match(/vimeo\.com\/(\d+)/);
-  if(vm) return '<div class="m-video"><iframe src="https://player.vimeo.com/video/'+encodeURIComponent(vm[1])+'" allow="autoplay;fullscreen;picture-in-picture" allowfullscreen></iframe></div>';
-  return '<div class="m-video"><video src="'+esc(url)+'" controls preload="metadata"></video></div>';
+  if(!kind){
+    // Direct video file or unrecognised — fall back to <video> tag
+    return '<div class="m-video"><video src="'+esc(url)+'" controls preload="metadata"></video></div>';
+  }
+  var thumb = ytId
+    ? "https://img.youtube.com/vi/"+encodeURIComponent(ytId)+"/hqdefault.jpg"
+    : ""; // Vimeo would need an API call for the real thumb; use solid bg
+  var embed = ytId
+    ? "https://www.youtube.com/embed/"+encodeURIComponent(ytId)+"?autoplay=1&rel=0"
+    : "https://player.vimeo.com/video/"+encodeURIComponent(vmId)+"?autoplay=1";
+  var bg = thumb
+    ? 'style="background-image:url(\''+thumb+'\');background-size:cover;background-position:center"'
+    : 'style="background:#1ab7ea"';
+  return '<div class="m-video m-video-thumb" '+bg+' '+
+    'data-embed="'+esc(embed)+'" onclick="playVideo(this)" '+
+    'role="button" tabindex="0" aria-label="Play video" '+
+    'onkeypress="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();playVideo(this);}">'+
+    '<span class="m-play" aria-hidden="true">'+
+      '<svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>'+
+    '</span></div>';
+}
+
+// Swap a video thumbnail for the actual iframe embed when clicked.
+function playVideo(node){
+  var src = node.getAttribute("data-embed");
+  if(!src) return;
+  var iframe = document.createElement("iframe");
+  iframe.src = src;
+  iframe.setAttribute("allow", "accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture");
+  iframe.setAttribute("allowfullscreen", "");
+  iframe.setAttribute("frameborder", "0");
+  // Replace the thumbnail in place — keep the wrapper for layout
+  node.innerHTML = "";
+  node.classList.remove("m-video-thumb");
+  node.removeAttribute("style");
+  node.removeAttribute("onclick");
+  node.removeAttribute("onkeypress");
+  node.removeAttribute("role");
+  node.removeAttribute("tabindex");
+  node.appendChild(iframe);
 }
 
 function openManual(id){
@@ -539,350 +638,7 @@ function initReveal(){
   els.forEach(function(e){io.observe(e);});
 }
 
-/* ---- ADMIN ---- */
-var WORK=null, EDLANG="en"; // admin skriver på engelsk som kilde
-
-function openAdmin(){
-  document.getElementById("adminOverlay").classList.add("active");
-  document.getElementById("adminLogin").classList.remove("hidden");
-  document.getElementById("adminEditor").classList.add("hidden");
-  document.getElementById("pwInput").value="";
-  document.getElementById("pwErr").style.display="none";
-  document.body.style.overflow="hidden";
-}
-function closeAdmin(){ document.getElementById("adminOverlay").classList.remove("active"); document.body.style.overflow=""; }
-function tryLogin(){
-  if(document.getElementById("pwInput").value===ADMIN_PASSWORD){
-    WORK=JSON.parse(JSON.stringify(D));
-    if(!WORK.house)WORK.house=JSON.parse(JSON.stringify(DEFAULT_DATA.house));
-    if(!WORK.contact)WORK.contact={heading:{},body:{}};
-    if(!WORK.area)WORK.area={heading:{},intro:{},trips:[]};
-    if(!Array.isArray(WORK.area.trips))WORK.area.trips=[];
-    if(!Array.isArray(WORK.manuals))WORK.manuals=[];
-    document.getElementById("adminLogin").classList.add("hidden");
-    document.getElementById("adminEditor").classList.remove("hidden");
-    renderAdmin();
-  }else document.getElementById("pwErr").style.display="block";
-}
-function toast(msg){
-  var el=document.getElementById("toast");
-  el.textContent=msg; el.classList.remove("hidden");
-  clearTimeout(window._tt); window._tt=setTimeout(function(){el.classList.add("hidden");},2800);
-}
-function ml(obj){ obj=obj||{}; return {en:obj.en||"",no:obj.no||"",de:obj.de||""}; }
-
-function renderAdmin(){
-  var b="";
-  b+='<div class="lang-tabs">';
-  LANGS.forEach(function(l){ b+='<button class="'+(l===EDLANG?"active":"")+'" onclick="setEdLang(\''+l+'\')">'+l.toUpperCase()+'</button>'; });
-  b+='</div><p class="admin-hint">Skriv alt på <b>engelsk (EN)</b>. Trykk så <b>⇄ Oversett-hjelper</b> øverst — den hjelper deg å oversette til norsk og tysk via kopier-og-lim, helt uten avhengighet av nett-tjenester. Du kan også bytte fane og skrive NO/DE manuelt. Nå redigerer du: <b>'+EDLANG.toUpperCase()+'</b>.</p>';
-
-  var h=WORK.house;
-  b+='<h2 class="admin-title">Generell informasjon</h2>';
-  b+='<div class="card">';
-  b+=inp("Navn på huset (likt alle språk)","house.name",h.name,true);
-  b+=tx("Slagord","house.tagline",h.tagline);
-  b+=tarea("Introtekst","house.intro",h.intro);
-  b+=row2(tx("Innsjekk","house.checkIn",h.checkIn),tx("Utsjekk","house.checkOut",h.checkOut));
-  b+=row2(inp("Hero-bilde (filnavn/URL)","house.heroImage",h.heroImage,true),inp("Bilde av huset (filnavn/URL)","house.houseImage",h.houseImage,true));
-  b+='</div>';
-
-  b+='<h2 class="admin-title">Kontakt-seksjon</h2>';
-  b+='<div class="card">';
-  b+=tx("Overskrift","contact.heading",WORK.contact.heading);
-  b+=tarea("Tekst","contact.body",WORK.contact.body);
-  b+='</div>';
-
-  b+='<h2 class="admin-title">Området</h2>';
-  b+='<div class="card">';
-  b+=tx("Overskrift","area.heading",WORK.area.heading);
-  b+=tarea("Introtekst","area.intro",WORK.area.intro);
-  b+='</div>';
-  WORK.area.trips.forEach(function(tr,ti){
-    b+='<div class="card"><div class="card-head"><h3>'+esc(t2(tr.title))+'</h3><div class="card-actions">'+
-      '<button class="btn ghost small" onclick="moveTrip('+ti+',-1)">↑</button>'+
-      '<button class="btn ghost small" onclick="moveTrip('+ti+',1)">↓</button>'+
-      '<button class="btn danger small" onclick="delTrip('+ti+')">Slett</button></div></div>';
-    b+=tx("Tittel","T."+ti+".title",tr.title);
-    b+=tarea("Beskrivelse","T."+ti+".text",tr.text);
-    b+=row2(inp("Bilde (filnavn/URL)","T."+ti+".image",tr.image,true),inp("Kartlenke (Google Maps URL)","T."+ti+".mapUrl",tr.mapUrl,true));
-    b+='</div>';
-  });
-  b+='<button class="btn" style="margin-bottom:10px" onclick="addTrip()">+ Ny tur/sted</button>';
-
-  b+='<h2 class="admin-title">Veiledninger</h2>';
-  WORK.manuals.forEach(function(m,mi){
-    b+='<div class="card"><div class="card-head"><h3>'+esc(t2(m.title))+'</h3><div class="card-actions">'+
-      '<button class="btn ghost small" onclick="moveM('+mi+',-1)">↑</button>'+
-      '<button class="btn ghost small" onclick="moveM('+mi+',1)">↓</button>'+
-      '<button class="btn danger small" onclick="delM('+mi+')">Slett</button></div></div>';
-    b+=row2(tx("Tittel","M."+mi+".title",m.title),selIcon("M."+mi+".icon",m.icon));
-    b+=tx("Kort beskrivelse","M."+mi+".summary",m.summary);
-    (m.sections||[]).forEach(function(s,si){
-      b+='<div class="block-ed"><div class="block-top"><span class="block-type">'+
-        (s.type==="checklist"?"Sjekkliste":"Tekst / video")+'</span>'+
-        '<button class="btn danger small" onclick="delS('+mi+','+si+')">Fjern blokk</button></div>';
-      b+=tx("Overskrift","S."+mi+"."+si+".heading",s.heading);
-      if(s.type==="checklist"){
-        var items=s.items&&!Array.isArray(s.items)?(s.items[EDLANG]||[]):[];
-        b+='<div class="field"><label>Punkter ('+EDLANG.toUpperCase()+')</label>';
-        items.forEach(function(it,ii){
-          b+='<div style="display:flex;gap:8px;margin-bottom:8px">'+
-            '<input class="input" value="'+esc(it)+'" oninput="setItem('+mi+','+si+','+ii+',this.value)"/>'+
-            '<button class="btn ghost small" onclick="delItem('+mi+','+si+','+ii+')">✕</button></div>';
-        });
-        b+='<button class="btn ghost small" onclick="addItem('+mi+','+si+')">+ Legg til punkt</button></div>';
-      }else{
-        b+=tarea("Brødtekst","S."+mi+"."+si+".body",s.body);
-        b+=inp("Video — YouTube/Vimeo-lenke","S."+mi+"."+si+".video",s.video,true);
-      }
-      b+='</div>';
-    });
-    b+='<div style="display:flex;gap:10px;margin-top:8px">'+
-      '<button class="btn ghost small" onclick="addS('+mi+',\'text\')">+ Tekst / video</button>'+
-      '<button class="btn ghost small" onclick="addS('+mi+',\'checklist\')">+ Sjekkliste</button></div></div>';
-  });
-  b+='<button class="btn" onclick="addM()">+ Ny veiledning</button>';
-  document.getElementById("adminBody").innerHTML=b;
-}
-function t2(f){ if(f==null)return ""; if(typeof f==="string")return f; return f.en||f.no||f.de||""; }
-function setEdLang(l){ EDLANG=l; renderAdmin(); }
-
-function inp(label,path,val,plain){
-  return '<div class="field"><label>'+esc(label)+'</label>'+
-    '<input class="input" value="'+esc(val)+'" oninput="setVal(\''+path+'\',this.value,'+(plain?'true':'false')+')"/></div>';
-}
-function tx(label,path,obj){
-  obj=obj&&typeof obj==="object"?obj:{};
-  return '<div class="field"><label>'+esc(label)+' ('+EDLANG.toUpperCase()+')</label>'+
-    '<input class="input" value="'+esc(obj[EDLANG]||"")+'" oninput="setVal(\''+path+'\',this.value,false)"/></div>';
-}
-function tarea(label,path,obj){
-  obj=obj&&typeof obj==="object"?obj:{};
-  return '<div class="field"><label>'+esc(label)+' ('+EDLANG.toUpperCase()+')</label>'+
-    '<textarea class="textarea" oninput="setVal(\''+path+'\',this.value,false)">'+esc(obj[EDLANG]||"")+'</textarea></div>';
-}
-function selIcon(path,val){
-  var opts=["key","wifi","flame","thermometer","compass","door","book","water"],o="";
-  opts.forEach(function(x){o+='<option value="'+x+'"'+(x===val?' selected':'')+'>'+x+'</option>';});
-  return '<div class="field"><label>Ikon</label><select class="select" onchange="setVal(\''+path+'\',this.value,true)">'+o+'</select></div>';
-}
-function row2(a,b){return '<div class="grid-2">'+a+b+'</div>';}
-
-// path-segmenter: house.X | contact.X | area.X | T.i.field | M.i.field | S.i.j.field
-function ref(path){
-  var p=path.split(".");
-  if(p[0]==="house") return {o:WORK.house,k:p[1]};
-  if(p[0]==="contact") return {o:WORK.contact,k:p[1]};
-  if(p[0]==="area") return {o:WORK.area,k:p[1]};
-  if(p[0]==="T") return {o:WORK.area.trips[+p[1]],k:p[2]};
-  if(p[0]==="M") return {o:WORK.manuals[+p[1]],k:p[2]};
-  if(p[0]==="S") return {o:WORK.manuals[+p[1]].sections[+p[2]],k:p[3]};
-  return null;
-}
-function setVal(path,value,plain){
-  var r=ref(path); if(!r) return;
-  if(plain){ r.o[r.k]=value; }
-  else{
-    if(!r.o[r.k]||typeof r.o[r.k]!=="object"||Array.isArray(r.o[r.k])) r.o[r.k]=ml(r.o[r.k]);
-    r.o[r.k][EDLANG]=value;
-  }
-}
-function setItem(mi,si,ii,v){
-  var s=WORK.manuals[mi].sections[si];
-  if(!s.items||Array.isArray(s.items)) s.items={en:[],no:[],de:[]};
-  if(!s.items[EDLANG]) s.items[EDLANG]=[];
-  s.items[EDLANG][ii]=v;
-}
-function addItem(mi,si){
-  var s=WORK.manuals[mi].sections[si];
-  if(!s.items||Array.isArray(s.items)) s.items={en:[],no:[],de:[]};
-  LANGS.forEach(function(l){ if(!s.items[l])s.items[l]=[]; });
-  s.items[EDLANG].push(""); renderAdmin();
-}
-function delItem(mi,si,ii){
-  var s=WORK.manuals[mi].sections[si];
-  if(s.items&&s.items[EDLANG]) s.items[EDLANG].splice(ii,1);
-  renderAdmin();
-}
-function addM(){
-  WORK.manuals.push({id:"ny-"+Math.random().toString(36).slice(2,7),icon:"book",
-    title:{en:"New guide",no:"Ny veiledning",de:"Neue Anleitung"},summary:ml(),
-    sections:[{type:"text",heading:ml(),body:ml(),video:""}]});
-  renderAdmin(); toast("Ny veiledning lagt til");
-}
-function delM(i){ if(confirm("Slette denne veiledningen?")){ WORK.manuals.splice(i,1); renderAdmin(); } }
-function moveM(i,d){ var j=i+d; if(j<0||j>=WORK.manuals.length)return; var x=WORK.manuals[i];WORK.manuals[i]=WORK.manuals[j];WORK.manuals[j]=x; renderAdmin(); }
-function addS(mi,type){
-  WORK.manuals[mi].sections.push(type==="checklist"
-    ?{type:"checklist",heading:ml(),items:{en:[""],no:[""],de:[""]}}
-    :{type:"text",heading:ml(),body:ml(),video:""});
-  renderAdmin();
-}
-function delS(mi,si){ WORK.manuals[mi].sections.splice(si,1); renderAdmin(); }
-function addTrip(){
-  WORK.area.trips.push({image:"",title:{en:"New place",no:"Nytt sted",de:"Neuer Ort"},text:ml(),mapUrl:""});
-  renderAdmin(); toast("Ny tur/sted lagt til");
-}
-function delTrip(i){ if(confirm("Slette denne turen/stedet?")){ WORK.area.trips.splice(i,1); renderAdmin(); } }
-function moveTrip(i,d){ var j=i+d; if(j<0||j>=WORK.area.trips.length)return; var x=WORK.area.trips[i];WORK.area.trips[i]=WORK.area.trips[j];WORK.area.trips[j]=x; renderAdmin(); }
-
-/* ---- OVERSETT-HJELPER (robust, ingen nett-tjeneste) ----
-   Du skriver alt på engelsk. Denne hjelperen samler all engelsk
-   tekst, lar deg kopiere den og åpne Google Translate i en ny fane,
-   og lime de oversatte linjene tilbake. Teksten fordeles automatisk
-   til riktige felter. Ingenting her påvirker gjestesiden. */
-
-// Samle alle oversettbare strenger i fast rekkefølge.
-// Returnerer en liste av {set:function(no,de-tekst), en:"engelsk"}
-function collectTranslatable(){
-  var out=[];
-  function addMl(o){
-    if(!o||typeof o!=="object"||Array.isArray(o)) return;
-    var en=o.en||"";
-    if(en&&en.trim()) out.push({kind:"ml",ref:o,en:en});
-  }
-  function addList(o){
-    if(!o||Array.isArray(o)) return;
-    var arr=o.en||[];
-    arr.forEach(function(v,i){
-      if(v&&v.trim()) out.push({kind:"list",ref:o,idx:i,en:v});
-    });
-  }
-  var h=WORK.house;
-  addMl(h.tagline); addMl(h.intro); addMl(h.checkIn); addMl(h.checkOut);
-  addMl(WORK.contact.heading); addMl(WORK.contact.body);
-  addMl(WORK.area.heading); addMl(WORK.area.intro);
-  (WORK.area.trips||[]).forEach(function(tr){ addMl(tr.title); addMl(tr.text); });
-  (WORK.manuals||[]).forEach(function(m){
-    addMl(m.title); addMl(m.summary);
-    (m.sections||[]).forEach(function(s){
-      addMl(s.heading);
-      if(s.type==="checklist") addList(s.items);
-      else addMl(s.body);
-    });
-  });
-  return out;
-}
-
-var TR_LIST=null;
-
-function openTranslateHelper(){
-  TR_LIST=collectTranslatable();
-  if(!TR_LIST.length){ toast("Skriv noe engelsk innhold først."); return; }
-  var lines=TR_LIST.map(function(x){ return x.en.replace(/\n/g," "); });
-  var joined=lines.join("\n");
-  var n=lines.length;
-  var html=""+
-    '<div style="position:fixed;inset:0;z-index:300;background:rgba(28,31,29,.92);'+
-      'overflow-y:auto;padding:40px 20px" id="trHelper">'+
-    '<div style="max-width:760px;margin:0 auto;background:var(--paper);'+
-      'border-radius:4px;padding:34px">'+
-    '<h2 style="font-family:var(--serif);font-size:1.7rem;margin-bottom:6px">Oversett-hjelper</h2>'+
-    '<p style="color:var(--muted);font-size:15px;margin-bottom:22px">'+
-      n+' tekstlinjer. Slik gjør du det, ett språk om gangen:</p>'+
-    '<ol style="color:var(--stone-700);font-size:15px;margin:0 0 22px 20px;line-height:1.9">'+
-      '<li>Trykk <b>Kopier engelsk tekst</b>.</li>'+
-      '<li>Trykk <b>Åpne Google Translate</b> (åpnes i ny fane). Lim inn, '+
-        'velg målspråk (Norsk eller Tysk), kopier oversettelsen.</li>'+
-      '<li>Lim oversettelsen i feltet under, velg språk, trykk <b>Bruk</b>.</li>'+
-      '<li>Gjenta for det andre språket.</li>'+
-    '</ol>'+
-    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">'+
-      '<button class="btn small" onclick="trCopy()">⧉ Kopier engelsk tekst</button>'+
-      '<button class="btn ghost small" onclick="trOpenGT(\'no\')">↗ Åpne Google Translate (Norsk)</button>'+
-      '<button class="btn ghost small" onclick="trOpenGT(\'de\')">↗ Åpne Google Translate (Tysk)</button>'+
-    '</div>'+
-    '<textarea id="trSrc" class="textarea" readonly style="min-height:120px;'+
-      'font-size:13px;margin-bottom:20px">'+esc(joined)+'</textarea>'+
-    '<div class="field"><label>Lim inn oversettelsen her '+
-      '(samme antall linjer: '+n+')</label>'+
-    '<textarea id="trPaste" class="textarea" style="min-height:140px" '+
-      'placeholder="Lim inn den oversatte teksten fra Google Translate ..."></textarea></div>'+
-    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">'+
-      '<span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;'+
-        'color:var(--moss)">Bruk som:</span>'+
-      '<button class="btn small" onclick="trApply(\'no\')">Bruk som norsk</button>'+
-      '<button class="btn small" onclick="trApply(\'de\')">Bruk som tysk</button>'+
-      '<button class="btn ghost small" style="margin-left:auto" '+
-        'onclick="trClose()">Lukk</button>'+
-    '</div>'+
-    '<p id="trMsg" style="color:var(--moss);font-size:14px;margin-top:16px"></p>'+
-    '</div></div>';
-  var d=document.createElement("div");
-  d.id="trHelperWrap"; d.innerHTML=html;
-  document.body.appendChild(d);
-}
-function trClose(){
-  var w=document.getElementById("trHelperWrap");
-  if(w) w.parentNode.removeChild(w);
-}
-function trCopy(){
-  var ta=document.getElementById("trSrc");
-  ta.select(); ta.setSelectionRange(0,999999);
-  var done=false;
-  try{ done=document.execCommand("copy"); }catch(e){}
-  if(navigator.clipboard&&!done){
-    navigator.clipboard.writeText(ta.value).then(function(){
-      document.getElementById("trMsg").textContent="Engelsk tekst kopiert.";
-    });
-  } else {
-    document.getElementById("trMsg").textContent=done
-      ? "Engelsk tekst kopiert." : "Marker teksten og kopier manuelt (Ctrl/Cmd+C).";
-  }
-}
-function trOpenGT(to){
-  // Google Translate åpnes med kildespråk engelsk
-  window.open("https://translate.google.com/?sl=en&tl="+to+"&op=translate","_blank");
-  document.getElementById("trMsg").textContent=
-    "Google Translate åpnet ("+(to==="no"?"Norsk":"Tysk")+"). Lim inn den kopierte teksten der.";
-}
-function trApply(lang){
-  var raw=document.getElementById("trPaste").value;
-  var msg=document.getElementById("trMsg");
-  if(!raw.trim()){ msg.textContent="Lim inn oversettelsen først."; return; }
-  var lines=raw.replace(/\r/g,"").split("\n");
-  // fjern eventuelle helt tomme linjer på slutten
-  while(lines.length>TR_LIST.length && lines[lines.length-1].trim()==="") lines.pop();
-  if(lines.length!==TR_LIST.length){
-    msg.style.color="#a8623c";
-    msg.textContent="Antall linjer stemmer ikke ("+lines.length+" limt inn, forventet "+
-      TR_LIST.length+"). Sørg for at du ikke har slått sammen eller delt linjer i oversettelsen.";
-    return;
-  }
-  TR_LIST.forEach(function(item,i){
-    var txt=lines[i];
-    if(item.kind==="ml"){ item.ref[lang]=txt; }
-    else {
-      if(!Array.isArray(item.ref[lang])) item.ref[lang]=(item.ref.en||[]).slice();
-      item.ref[lang][item.idx]=txt;
-    }
-  });
-  msg.style.color="var(--moss)";
-  msg.textContent=(lang==="no"?"Norsk":"Tysk")+" er lagt inn ("+lines.length+
-    " linjer). Du kan nå gjøre det andre språket, eller lukke og laste ned data.js.";
-  document.getElementById("trPaste").value="";
-  renderAdmin();
-  // gjenåpne hjelperen oppå den oppdaterte admin
-  setTimeout(function(){ /* hjelper ligger fortsatt i DOM, behold den */ },0);
-}
-
-
-function downloadData(){
-  var header=
-"// ════════════════════════════════════════════════════════════\n"+
-"//  VILLAEN I ALSVIK — INNHOLD (en/no/de)\n"+
-"//  Generert fra admin. Legg denne filen opp på GitHub\n"+
-"//  (erstatt den gamle data.js). Siden oppdateres på ~30 sek.\n"+
-"// ════════════════════════════════════════════════════════════\n\n"+
-"window.VILLA_DATA = ";
-  var blob=new Blob([header+JSON.stringify(WORK,null,2)+";\n"],{type:"text/javascript"});
-  var a=document.createElement("a");
-  a.href=URL.createObjectURL(blob); a.download="data.js";
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  toast("data.js lastet ned — legg den opp på GitHub");
-}
-
+/* ─── Old built-in admin removed — admin lives at /admin/ now. ─── */
 render();
 initReveal();
 
