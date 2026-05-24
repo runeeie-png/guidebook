@@ -1010,47 +1010,308 @@ function renderGuidebook(){
             "Also filled in: " + others.join(", ").toUpperCase()));
         }
       });
+      var urlWrap = el("div", { style: "margin-top:8px" });
       var url = el("input", { type: "text", placeholder: "Google Maps URL", value: trip.mapUrl || "" });
-      url.oninput = function(){ trip.mapUrl = url.value; onChange(); };
-      body.appendChild(url);
+      var mapPrev = el("div", { class: "map-preview", style: "margin-top:6px" });
+      function updateMapPreview(){
+        mapPrev.innerHTML = "";
+        var info = parseMapUrl(trip.mapUrl || "");
+        if(info){
+          var box = el("a", { href: trip.mapUrl, target: "_blank", rel: "noopener",
+            style: "display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border:1px solid var(--line);border-radius:4px;text-decoration:none;color:var(--ink);font-size:12px" });
+          // Pin SVG
+          var pin = el("span", { style: "display:inline-flex;width:14px;height:14px" });
+          pin.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-7.5-7-12a7 7 0 0 1 14 0c0 4.5-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>';
+          box.appendChild(pin);
+          box.appendChild(el("span", { style: "font-weight:500" }, info.label));
+          if(info.kind){
+            box.appendChild(el("span", { style: "color:var(--muted);font-size:11px;margin-left:4px" }, "· " + info.kind));
+          }
+          mapPrev.appendChild(box);
+        } else if((trip.mapUrl || "").trim()){
+          mapPrev.appendChild(el("small", { style: "color:var(--err);font-size:11px" }, "URL recognised but no place name detected — link will still work."));
+        }
+      }
+      url.oninput = function(){ trip.mapUrl = url.value; updateMapPreview(); onChange(); };
+      urlWrap.appendChild(url);
+      urlWrap.appendChild(mapPrev);
+      updateMapPreview();
+      body.appendChild(urlWrap);
     },
     function(){ return { image: "", title: { en:"",no:"",de:"" }, text: { en:"",no:"",de:"" }, mapUrl: "" }; },
     function(){ setDirty(true); }
   ));
   pane.appendChild(areaS);
 
-  // Manuals (if exists in data)
-  if(Array.isArray(d.manuals)){
-    var manualsS = el("div", { class: "section" }, [
-      el("h2", null, "Manuals & instructions"),
-      el("p", { class: "help" }, "How-tos for the house (sauna, hot tub, etc.)")
-    ]);
-    manualsS.appendChild(repeater(d.manuals,
-      function(man, body, onChange){
-        ["title", "text"].forEach(function(f){ man[f] = man[f] || { en:"",no:"",de:"" }; });
-        ["en","no","de"].forEach(function(lng){
-          if(lng !== currentGuidebookLang) return;
-          var t = el("input", { type: "text", placeholder: "Title", value: man.title[lng] || "" });
-          t.oninput = function(){ man.title[lng] = t.value; onChange(); };
-          body.appendChild(t);
-          var x = el("textarea", { placeholder: "Instructions" }, man.text[lng] || "");
-          x.oninput = function(){ man.text[lng] = x.value; onChange(); };
-          body.appendChild(x);
-          var others = ["en","no","de"].filter(function(o){ return o !== lng && (man.title[o] || man.text[o]); });
-          if(others.length){
-            body.appendChild(el("small", { style: "color:var(--muted);font-size:11px;font-style:italic" },
-              "Also filled in: " + others.join(", ").toUpperCase()));
+  // Manuals — matches the guidebook's actual data shape:
+  //   { id, icon, title:{en,no,de}, summary:{en,no,de},
+  //     sections: [ {type:'text', heading:{...}, body:{...}, video:''}
+  //                 | {type:'checklist', heading:{...}, items:{en:[],no:[],de:[]}} ] }
+  d.manuals = d.manuals || [];
+  var manualsS = el("div", { class: "section" }, [
+    el("h2", null, "Manuals & instructions"),
+    el("p", { class: "help" }, "How-tos for the house (arrival, sauna, hot tub, etc.). Each manual has an ID, an icon, a short summary and one or more sections (text+video, or checklist).")
+  ]);
+  manualsS.appendChild(repeater(d.manuals,
+    function(man, body, onChange){
+      // Defensive defaults so the form is robust to missing keys
+      man.title   = man.title   || { en:"", no:"", de:"" };
+      man.summary = man.summary || { en:"", no:"", de:"" };
+      man.sections = Array.isArray(man.sections) ? man.sections : [];
+      if(!man.id) man.id = "m" + Math.random().toString(36).slice(2,8);
+      if(!man.icon) man.icon = "book";
+
+      // Header row: ID + icon picker
+      var headRow = el("div", { style: "display:flex;gap:8px;align-items:center;font-size:12px;margin-bottom:8px" });
+      headRow.appendChild(el("span", { style: "color:#999;width:60px" }, "ID:"));
+      var idInp = el("input", { type: "text", value: man.id, style: "flex:0 0 160px" });
+      idInp.oninput = function(){
+        // Slug-ify lightly: keep letters, digits, dashes, lowercase
+        var v = idInp.value.toLowerCase().replace(/[^a-z0-9\-]/g,"").slice(0,32);
+        idInp.value = v; man.id = v || ("m"+Math.random().toString(36).slice(2,6));
+        onChange();
+      };
+      headRow.appendChild(idInp);
+      headRow.appendChild(el("span", { style: "color:#999;width:40px;margin-left:8px" }, "Icon:"));
+      var iconOpts = ["key","wifi","flame","thermometer","compass","door","book","water"];
+      var iconSel = el("select", null, iconOpts.map(function(o){
+        return el("option", { value: o, selected: o===man.icon ? "selected" : undefined }, o);
+      }));
+      iconSel.onchange = function(){ man.icon = iconSel.value; onChange(); };
+      headRow.appendChild(iconSel);
+      body.appendChild(headRow);
+
+      // Title + summary, for active language
+      var lng = currentGuidebookLang;
+      var titleInp = el("input", { type: "text", placeholder: "Title ("+lng.toUpperCase()+")", value: man.title[lng] || "" });
+      titleInp.oninput = function(){ man.title[lng] = titleInp.value; onChange(); };
+      body.appendChild(titleInp);
+
+      var sumInp = el("textarea", { placeholder: "Short summary ("+lng.toUpperCase()+") — one or two sentences shown on the card" }, man.summary[lng] || "");
+      sumInp.oninput = function(){ man.summary[lng] = sumInp.value; onChange(); };
+      body.appendChild(sumInp);
+
+      var othersM = ["en","no","de"].filter(function(o){ return o !== lng && (man.title[o] || man.summary[o]); });
+      if(othersM.length){
+        body.appendChild(el("small", { style: "color:var(--muted);font-size:11px;font-style:italic" },
+          "Also filled in: " + othersM.join(", ").toUpperCase()));
+      }
+
+      // Sections — nested editor
+      var secLabel = el("div", { style: "margin:14px 0 6px;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase" }, "Sections");
+      body.appendChild(secLabel);
+
+      var secWrap = el("div", { style: "border-left:2px solid var(--line);padding-left:14px;margin-left:2px" });
+      function renderSections(){
+        secWrap.innerHTML = "";
+        man.sections.forEach(function(s, si){
+          s.heading = s.heading || { en:"", no:"", de:"" };
+          var sRow = el("div", { style: "background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:12px;margin-bottom:10px" });
+
+          // Section header: type label + up/down/delete
+          var typeLabel = s.type === "checklist" ? "Checklist" : "Text / Video";
+          var sHead = el("div", { style: "display:flex;justify-content:space-between;align-items:center;margin-bottom:10px" });
+          sHead.appendChild(el("span", { style: "font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase" }, typeLabel));
+          var sCtrls = el("div", { style: "display:flex;gap:4px" });
+          var sUp = el("button", { onclick: function(){
+            if(si===0) return;
+            var tmp = man.sections[si-1]; man.sections[si-1] = man.sections[si]; man.sections[si] = tmp;
+            onChange(); renderSections();
+          }, style: "padding:4px 8px;font-size:11px" }, "▲");
+          var sDn = el("button", { onclick: function(){
+            if(si===man.sections.length-1) return;
+            var tmp = man.sections[si+1]; man.sections[si+1] = man.sections[si]; man.sections[si] = tmp;
+            onChange(); renderSections();
+          }, style: "padding:4px 8px;font-size:11px" }, "▼");
+          var sDel = el("button", { class: "del", onclick: function(){
+            if(!confirm("Remove this section?")) return;
+            man.sections.splice(si,1); onChange(); renderSections();
+          }, style: "padding:4px 8px;font-size:11px" }, "✕");
+          sCtrls.appendChild(sUp); sCtrls.appendChild(sDn); sCtrls.appendChild(sDel);
+          sHead.appendChild(sCtrls);
+          sRow.appendChild(sHead);
+
+          // Heading (all section types)
+          var hInp = el("input", { type: "text", placeholder: "Heading ("+lng.toUpperCase()+") — optional", value: s.heading[lng] || "" });
+          hInp.oninput = function(){ s.heading[lng] = hInp.value; onChange(); };
+          sRow.appendChild(hInp);
+
+          if(s.type === "checklist"){
+            s.items = s.items || { en:[], no:[], de:[] };
+            // Migrate if old shape (array directly)
+            if(Array.isArray(s.items)){ s.items = { en: s.items.slice(), no: [], de: [] }; }
+            ["en","no","de"].forEach(function(L){ if(!Array.isArray(s.items[L])) s.items[L] = []; });
+
+            var itemsBox = el("div", { style: "margin-top:8px" });
+            function renderItems(){
+              itemsBox.innerHTML = "";
+              s.items[lng].forEach(function(it, ii){
+                var rrow = el("div", { style: "display:flex;gap:6px;margin-bottom:6px" });
+                var itInp = el("input", { type: "text", value: it, style: "flex:1" });
+                itInp.oninput = function(){ s.items[lng][ii] = itInp.value; onChange(); };
+                var itDel = el("button", { onclick: function(){
+                  s.items[lng].splice(ii,1); onChange(); renderItems();
+                }, style: "padding:6px 10px" }, "✕");
+                rrow.appendChild(itInp); rrow.appendChild(itDel);
+                itemsBox.appendChild(rrow);
+              });
+              var addBtn = el("button", { onclick: function(){
+                s.items[lng].push(""); onChange(); renderItems();
+              }, style: "padding:6px 12px;font-size:12px;margin-top:4px" }, "+ Add item ("+lng.toUpperCase()+")");
+              itemsBox.appendChild(addBtn);
+            }
+            renderItems();
+            sRow.appendChild(itemsBox);
+          } else {
+            // Text / video section
+            s.body = s.body || { en:"", no:"", de:"" };
+            var bodyInp = el("textarea", { placeholder: "Body text ("+lng.toUpperCase()+")" }, s.body[lng] || "");
+            bodyInp.oninput = function(){ s.body[lng] = bodyInp.value; onChange(); };
+            sRow.appendChild(bodyInp);
+
+            var vidWrap = el("div", { style: "margin-top:8px" });
+            var vidInp = el("input", { type: "text", placeholder: "Video URL — YouTube or Vimeo (optional)", value: s.video || "" });
+            var vidPrev = el("div", { class: "video-preview" });
+            function updateVideoPreview(){
+              vidPrev.innerHTML = "";
+              var t = videoThumb(s.video || "");
+              if(t){
+                var img = el("img", { src: t.thumb, alt: "Video preview", style: "width:160px;height:90px;object-fit:cover;border-radius:4px;display:block" });
+                var lab = el("div", { style: "font-size:11px;color:var(--muted);margin-top:4px" }, t.kind + " · click to test link");
+                var a = el("a", { href: s.video, target: "_blank", rel: "noopener", style: "display:inline-block;text-decoration:none" }, [img, lab]);
+                vidPrev.appendChild(a);
+              } else if((s.video || "").trim()){
+                vidPrev.appendChild(el("small", { style: "color:var(--err);font-size:11px" }, "Not a recognised YouTube or Vimeo URL — no preview."));
+              }
+            }
+            vidInp.oninput = function(){ s.video = vidInp.value; updateVideoPreview(); onChange(); };
+            vidWrap.appendChild(vidInp);
+            vidWrap.appendChild(vidPrev);
+            updateVideoPreview();
+            sRow.appendChild(vidWrap);
           }
+
+          // Hint about other languages
+          var othersS = ["en","no","de"].filter(function(o){
+            if(o === lng) return false;
+            if(s.heading[o]) return true;
+            if(s.type === "checklist" && s.items && s.items[o] && s.items[o].length) return true;
+            if(s.type !== "checklist" && s.body && s.body[o]) return true;
+            return false;
+          });
+          if(othersS.length){
+            sRow.appendChild(el("small", { style: "color:var(--muted);font-size:11px;font-style:italic;display:block;margin-top:6px" },
+              "Also filled in: " + othersS.join(", ").toUpperCase()));
+          }
+
+          secWrap.appendChild(sRow);
         });
-        var v = el("input", { type: "text", placeholder: "Video URL (YouTube/Vimeo — optional)", value: man.video || "" });
-        v.oninput = function(){ man.video = v.value; onChange(); };
-        body.appendChild(v);
-      },
-      function(){ return { title:{en:"",no:"",de:""}, text:{en:"",no:"",de:""}, video:"" }; },
-      function(){ setDirty(true); }
-    ));
-    pane.appendChild(manualsS);
+
+        // Add-section buttons
+        var addRow = el("div", { style: "display:flex;gap:6px;margin-top:4px" });
+        var addText = el("button", { onclick: function(){
+          man.sections.push({ type: "text", heading: { en:"", no:"", de:"" }, body: { en:"", no:"", de:"" }, video: "" });
+          onChange(); renderSections();
+        }, style: "padding:6px 12px;font-size:12px" }, "+ Text / video section");
+        var addCheck = el("button", { onclick: function(){
+          man.sections.push({ type: "checklist", heading: { en:"", no:"", de:"" }, items: { en:[], no:[], de:[] } });
+          onChange(); renderSections();
+        }, style: "padding:6px 12px;font-size:12px" }, "+ Checklist section");
+        addRow.appendChild(addText); addRow.appendChild(addCheck);
+        secWrap.appendChild(addRow);
+      }
+      renderSections();
+      body.appendChild(secWrap);
+    },
+    function(){
+      return {
+        id: "m" + Math.random().toString(36).slice(2,8),
+        icon: "book",
+        title:   { en:"", no:"", de:"" },
+        summary: { en:"", no:"", de:"" },
+        sections: []
+      };
+    },
+    function(){ setDirty(true); }
+  ));
+  pane.appendChild(manualsS);
+}
+
+// ─── Video thumbnail helper (shared with map preview below) ──────
+// Returns { thumb, kind, id } for YouTube/Vimeo URLs, else null.
+// YouTube: img.youtube.com/vi/{id}/hqdefault.jpg (no API key needed)
+// Vimeo: we use a tiny placeholder strip — actual Vimeo thumbnails
+// need an API call, so we just confirm the link is recognised.
+function videoThumb(url){
+  if(!url) return null;
+  var s = String(url).trim();
+  // YouTube long, short, and embed forms
+  var m = s.match(/(?:youtube\.com\/(?:watch\?[^#]*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_\-]{6,})/);
+  if(m){
+    return {
+      thumb: "https://img.youtube.com/vi/" + m[1] + "/hqdefault.jpg",
+      kind: "YouTube",
+      id: m[1]
+    };
   }
+  var vm = s.match(/vimeo\.com\/(?:video\/)?(\d{4,})/);
+  if(vm){
+    // We don't have an API key; show a generic Vimeo placeholder SVG inline.
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="90" viewBox="0 0 160 90">' +
+      '<rect width="160" height="90" fill="#1ab7ea"/>' +
+      '<text x="80" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="white">Vimeo</text>' +
+      '<text x="80" y="70" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">#' + vm[1] + '</text>' +
+      '</svg>';
+    return {
+      thumb: "data:image/svg+xml;utf8," + encodeURIComponent(svg),
+      kind: "Vimeo",
+      id: vm[1]
+    };
+  }
+  return null;
+}
+
+// Extract a human-readable label from a Google Maps URL.
+// Handles ?q=Preikestolen, /maps/place/Preikestolen+(Pulpit+Rock)/,
+// shortened maps.app.goo.gl links (no label, just shows "Map link"),
+// and bare coordinates @lat,lng.
+function parseMapUrl(url){
+  if(!url) return null;
+  var s = String(url).trim();
+  if(!/^https?:\/\//i.test(s)) return null;
+  // Shortened — no place info available client-side
+  if(/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(s)){
+    return { label: "Map link", kind: "shortened" };
+  }
+  // /place/<name>/...
+  var pm = s.match(/\/maps\/place\/([^\/?@]+)/i);
+  if(pm){
+    var name = decodeURIComponent(pm[1]).replace(/\+/g," ").replace(/^\s+|\s+$/g,"");
+    if(name) return { label: name, kind: "place" };
+  }
+  // ?q=<query> or &q=<query>
+  var qm = s.match(/[?&]q=([^&#]+)/i);
+  if(qm){
+    var q = decodeURIComponent(qm[1]).replace(/\+/g," ").replace(/^\s+|\s+$/g,"");
+    // If the query is just coordinates, label as coords
+    if(/^-?\d+\.\d+\s*,\s*-?\d+\.\d+$/.test(q)){
+      return { label: q, kind: "coordinates" };
+    }
+    if(q) return { label: q, kind: "search" };
+  }
+  // Bare coordinates @lat,lng
+  var cm = s.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if(cm){
+    return { label: cm[1] + ", " + cm[2], kind: "coordinates" };
+  }
+  // Fallback — domain only
+  try {
+    var host = new URL(s).hostname.replace(/^www\./,"");
+    if(/google|openstreetmap|apple\.com\/maps/i.test(host)){
+      return { label: "Map link", kind: host };
+    }
+  } catch(e){}
+  return null;
 }
 
 // ─── STATS PANE ───────────────────────────────────────────────────
