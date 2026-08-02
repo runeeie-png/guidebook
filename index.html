@@ -307,9 +307,10 @@
     transition:opacity 2.2s ease-in-out;
   }
   .hero-slide.active{opacity:1;}
-  .hero-slide.s1{background-image:url('bilder/hage-fontene1.jpg'); background-position:center 66%;}
-  .hero-slide.s2{background-image:url('bilder/hage-fontene2.jpg'); background-position:center 38%;}
-  .hero-slide.s3{background-image:url('bilder/villa-fasade2.jpg'); background-position:center 40%;}
+  .hero-slide.s1{background-image:url('bilder/alsvik-6541.jpg'); background-position:center 45%;}
+  .hero-slide.s2{background-image:url('bilder/alsvik-6481.jpg'); background-position:center 42%;}
+  .hero-slide.s3{background-image:url('bilder/alsvik-4051.jpg'); background-position:center 50%;}
+  .hero-slide.s4{background-image:url('bilder/hage-fontene2.jpg'); background-position:center 38%;}
   .hero-overlay{
     position:absolute; inset:0;
     background:linear-gradient(180deg, rgba(25,28,22,0.30) 0%, rgba(25,28,22,0.14) 42%, rgba(25,28,22,0.60) 100%);
@@ -401,16 +402,16 @@
   .gallery-section .head{text-align:center; max-width:640px; margin:0 auto;}
   .gallery-section h2{font-size:30px; color:var(--olive-dark); letter-spacing:0.03em;}
   .gallery-section .head p{font-size:15px; color:#5C5C59; margin-top:16px;}
-  .gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px; margin-top:50px;
+  .gallery-grid{margin-top:50px;}
+  .collage-row{display:flex; gap:14px; height:360px; margin-bottom:14px;}
+  .collage-row:last-of-type{margin-bottom:0;}
+  .collage-tile{
+    position:relative; overflow:hidden; background:var(--ivory-warm);
+    height:100%; flex-shrink:1; flex-basis:0; min-width:0; cursor:pointer;
   }
-  .gallery-grid figure{position:relative; overflow:hidden; background:var(--ivory-warm); aspect-ratio:4/3;}
-  .gallery-grid figure.tall{aspect-ratio:3/4;}
-  .gallery-grid img{width:100%; height:100%; object-fit:cover; transition:transform .5s ease;}
-  .gallery-grid figure:hover img{transform:scale(1.07);}
-  .gallery-grid figcaption{
+  .collage-tile img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease;}
+  .collage-tile:hover img{transform:scale(1.07);}
+  .collage-tile figcaption{
     position:absolute; left:0; right:0; bottom:0;
     padding:14px;
     background:linear-gradient(180deg, transparent, rgba(30,32,26,0.7));
@@ -419,7 +420,49 @@
     letter-spacing:0.14em; text-transform:uppercase;
     opacity:0; transition:opacity .3s ease;
   }
-  .gallery-grid figure:hover figcaption{opacity:1;}
+  .collage-tile:hover figcaption{opacity:1;}
+  .collage-more{
+    display:block; margin:26px auto 0; text-align:center;
+    font-family:'Jost', sans-serif; font-size:12px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--olive-dark); cursor:pointer;
+    background:none; border:none; border-bottom:1px solid var(--olive-dark); padding-bottom:3px;
+  }
+  @media (max-width:700px){
+    .collage-row{flex-direction:column; height:auto; gap:10px; margin-bottom:10px;}
+    .collage-tile{height:240px; flex-basis:240px;}
+  }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    position:fixed; inset:0; z-index:500;
+    background:rgba(18,20,16,0.97);
+    display:none; align-items:center; justify-content:center;
+    padding:70px 70px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-inner{position:relative; max-width:1100px; width:100%; text-align:center;}
+  .lightbox img{max-width:100%; max-height:76vh; margin:0 auto; display:block; object-fit:contain;}
+  .lightbox-cap{color:var(--ivory); font-family:'Jost', sans-serif; font-size:13px; letter-spacing:0.06em; margin-top:18px;}
+  .lightbox-count{color:#B8BBA9; font-size:11px; letter-spacing:0.14em; margin-top:6px; text-transform:uppercase;}
+  .lightbox-close{
+    position:absolute; top:-46px; right:-10px;
+    background:none; border:none; color:var(--ivory);
+    font-size:32px; cursor:pointer; line-height:1; padding:6px;
+  }
+  .lightbox-nav{
+    position:fixed; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:var(--ivory);
+    font-size:40px; cursor:pointer; padding:14px 18px; opacity:0.75; transition:opacity .2s ease;
+  }
+  .lightbox-nav:hover{opacity:1;}
+  .lightbox-prev{left:14px;}
+  .lightbox-next{right:14px;}
+  @media (max-width:900px){
+    .lightbox{padding:76px 18px 30px;}
+    .lightbox-close{top:-52px; right:0;}
+    .lightbox-nav{font-size:28px; padding:10px 12px;}
+    .lightbox-prev{left:2px;} .lightbox-next{right:2px;}
+  }
 
   /* ---------- REGION ---------- */
   .region{padding:100px 0; background:var(--ivory-warm);}
@@ -622,6 +665,7 @@
   <div class="hero-slide s1 active"></div>
   <div class="hero-slide s2"></div>
   <div class="hero-slide s3"></div>
+  <div class="hero-slide s4"></div>
   <div class="hero-overlay"></div>
   <div class="hero-inner">
     <div class="hero-mono">
@@ -654,9 +698,9 @@
       <a href="#gallery" class="btn outline">The Villa</a>
     </div>
     <div class="retreat-media">
-      <div class="main-img" style="background-image:url('bilder/hage-dronefoto1.jpg');"></div>
-      <div class="sub-img" style="background-image:url('bilder/hage-terrasse1.jpg');"></div>
-      <div class="sub-img" style="background-image:url('bilder/hage-badestamp3.jpg');"></div>
+      <div class="main-img" style="background-image:url('bilder/alsvik-6758.jpg');"></div>
+      <div class="sub-img" style="background-image:url('bilder/alsvik-4161a.jpg');"></div>
+      <div class="sub-img" style="background-image:url('bilder/stue-peis.jpg');"></div>
     </div>
   </div>
 </section>
@@ -694,34 +738,64 @@
       <p>Manicured lawns, ancient oaks, a greenhouse and a stream — room to be together, and space to find your own corner of quiet.</p>
     </div>
     <div class="gallery-grid" id="gardenGrid">
-      <figure><img src="bilder/hage-lounge1.jpg" alt="Hagelounge" loading="lazy"><figcaption>Garden Lounge</figcaption></figure>
-      <figure><img src="bilder/hage-roser1.jpg" alt="Roser i hagen" loading="lazy"><figcaption>Roses</figcaption></figure>
-      <figure><img src="bilder/hage-veranda1.jpg" alt="Veranda" loading="lazy"><figcaption>Veranda</figcaption></figure>
-      <figure><img src="bilder/hage-petunia.jpg" alt="Petunia" loading="lazy"><figcaption>Summer Blooms</figcaption></figure>
-      <figure><img src="bilder/hage-hortensia.jpg" alt="Hortensia" loading="lazy"><figcaption>Hydrangeas</figcaption></figure>
-      <figure><img src="bilder/hage-drivhus3.jpg" alt="Drivhus" loading="lazy"><figcaption>Greenhouse</figcaption></figure>
-      <figure><img src="bilder/hage-peisplass.jpg" alt="Peisplass ute" loading="lazy"><figcaption>Fire Pit</figcaption></figure>
-      <figure><img src="bilder/hage-plen.jpg" alt="Plen" loading="lazy"><figcaption>Lawn</figcaption></figure>
+      <figure><img src="bilder/hage-dronefoto1.jpg" alt="Aerial view of the garden" loading="lazy"><figcaption>Aerial View</figcaption></figure>
+      <figure><img src="bilder/villa-terrasse-lys1.jpg" alt="Terrace in the evening light" loading="lazy"><figcaption>Evening Terrace</figcaption></figure>
+      <figure><img src="bilder/alsvik-6376.jpg" alt="Wood-fired hot tub and greenhouse" loading="lazy"><figcaption>Hot Tub</figcaption></figure>
+      <figure><img src="bilder/alsvik-drone-airbnb1.jpg" alt="Aerial view toward the fjord" loading="lazy"><figcaption>Above the Fjord</figcaption></figure>
+      <figure><img src="bilder/hage-lounge2.jpg" alt="Garden lounge seating" loading="lazy"><figcaption>Garden Lounge</figcaption></figure>
+      <figure><img src="bilder/hage-hortensia.jpg" alt="Hydrangeas" loading="lazy"><figcaption>Hydrangeas</figcaption></figure>
     </div>
   </div>
 </section>
 
-<section class="gallery-section alt" id="interior">
+<section class="gallery-section alt" id="living">
   <div class="container">
     <div class="head">
-      <div class="eyebrow">The Villa Inside</div>
-      <h2>Warm, considered interiors</h2>
-      <p>Five bedrooms, three fireplaces and a kitchen built for gathering — every room designed for long, unhurried stays.</p>
+      <div class="eyebrow">Living</div>
+      <h2>Made for slow evenings</h2>
+      <p>Three fireplaces and multiple lounges — corners for everyone, at every hour.</p>
     </div>
-    <div class="gallery-grid" id="interiorGrid">
-      <figure><img src="bilder/stue-peis.jpg" alt="Stue" loading="lazy"><figcaption>Living Room</figcaption></figure>
-      <figure><img src="bilder/stue-stue1.jpg" alt="Sittehjørne" loading="lazy"><figcaption>Lounge Corner</figcaption></figure>
-      <figure><img src="bilder/kjokken.jpg" alt="Kjøkken" loading="lazy"><figcaption>Kitchen</figcaption></figure>
-      <figure class="tall"><img src="bilder/soverom-soverom4.jpg" alt="Soverom" loading="lazy"><figcaption>Bedroom</figcaption></figure>
-      <figure><img src="bilder/stue-vinkjeller2.jpg" alt="Vinkjeller" loading="lazy"><figcaption>Wine Cellar</figcaption></figure>
-      <figure><img src="bilder/spisestue.jpg" alt="Spisestue" loading="lazy"><figcaption>Dining Room</figcaption></figure>
-      <figure><img src="bilder/stue-loftsstue.jpg" alt="Loftstue" loading="lazy"><figcaption>Loft Lounge</figcaption></figure>
-      <figure><img src="bilder/kjokken-peis2.jpg" alt="Kjøkken med peis" loading="lazy"><figcaption>Kitchen Fireplace</figcaption></figure>
+    <div class="gallery-grid" id="livingGrid">
+      <figure><img src="bilder/stue-peis.jpg" alt="Living room with fireplace" loading="lazy"><figcaption>Living Room</figcaption></figure>
+      <figure><img src="bilder/stue-lys.jpg" alt="Bright lounge" loading="lazy"><figcaption>Bright Lounge</figcaption></figure>
+      <figure><img src="bilder/alsvik-8381.jpg" alt="Living room with garden view" loading="lazy"><figcaption>Living Room</figcaption></figure>
+      <figure><img src="bilder/stue-loft2.jpg" alt="Loft lounge" loading="lazy"><figcaption>Loft Lounge</figcaption></figure>
+      <figure><img src="bilder/alsvik-4263.jpg" alt="Attic lounge" loading="lazy"><figcaption>Attic Lounge</figcaption></figure>
+      <figure><img src="bilder/stue-vinkjeller2.jpg" alt="Wine cellar" loading="lazy"><figcaption>Wine Cellar</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section" id="dining">
+  <div class="container">
+    <div class="head">
+      <div class="eyebrow">Dining</div>
+      <h2>A kitchen built for gathering</h2>
+      <p>Full chef's kitchen and a table that seats the whole family.</p>
+    </div>
+    <div class="gallery-grid" id="diningGrid">
+      <figure><img src="bilder/alsvik-4038.jpg" alt="Open kitchen and dining area" loading="lazy"><figcaption>Kitchen &amp; Dining</figcaption></figure>
+      <figure><img src="bilder/alsvik-4045.jpg" alt="Dining room" loading="lazy"><figcaption>Dining Room</figcaption></figure>
+      <figure><img src="bilder/alsvik-4042.jpg" alt="Kitchen detail" loading="lazy"><figcaption>Kitchen</figcaption></figure>
+      <figure><img src="bilder/kjokken-bord2.jpg" alt="Kitchen dining table" loading="lazy"><figcaption>Kitchen Table</figcaption></figure>
+      <figure><img src="bilder/kjokken-peis2.jpg" alt="Kitchen with fireplace" loading="lazy"><figcaption>Kitchen Fireplace</figcaption></figure>
+      <figure><img src="bilder/alsvik-4051.jpg" alt="Dining room, wide view" loading="lazy"><figcaption>Dining Room</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section alt" id="sleeping">
+  <div class="container">
+    <div class="head">
+      <div class="eyebrow">Sleeping</div>
+      <h2>Five bedrooms, quiet and comfortable</h2>
+      <p>Restful rooms for up to twelve guests, with additional sleeping options for more.</p>
+    </div>
+    <div class="gallery-grid" id="sleepingGrid">
+      <figure><img src="bilder/alsvik-4065.jpg" alt="Bedroom" loading="lazy"><figcaption>Bedroom</figcaption></figure>
+      <figure><img src="bilder/soverom-loft2.jpg" alt="Loft bedroom" loading="lazy"><figcaption>Loft Bedroom</figcaption></figure>
+      <figure><img src="bilder/alsvik-4058.jpg" alt="Bedroom with bunk beds" loading="lazy"><figcaption>Bunk Room</figcaption></figure>
+      <figure><img src="bilder/alsvik-4071.jpg" alt="Nursery" loading="lazy"><figcaption>Nursery</figcaption></figure>
     </div>
   </div>
 </section>
@@ -840,18 +914,37 @@
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lbClose" aria-label="Close">&times;</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lightbox-cap" id="lbCap"></div>
+    <div class="lightbox-count" id="lbCount"></div>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="Next">&#8250;</button>
+</div>
+
 <div id="google_translate_element"></div>
 <script>
-  /* --- Hero-karusell med myk crossfade --- */
-  (function(){
+  /* --- Hero-karusell med myk crossfade (admin-styrbar via room "Hero") --- */
+  var heroSlideIndex = 0, heroTimer = null;
+  function startHeroCarousel(){
     var slides = document.querySelectorAll('.hero-slide');
-    var i = 0;
-    setInterval(function(){
-      slides[i].classList.remove('active');
-      i = (i + 1) % slides.length;
-      slides[i].classList.add('active');
+    if(heroTimer){ clearInterval(heroTimer); heroTimer = null; }
+    if(!slides.length) return;
+    heroSlideIndex = 0;
+    Array.prototype.forEach.call(slides, function(s, i){ s.classList.toggle('active', i === 0); });
+    if(slides.length < 2) return;
+    heroTimer = setInterval(function(){
+      var cur = document.querySelectorAll('.hero-slide');
+      if(!cur.length) return;
+      cur[heroSlideIndex].classList.remove('active');
+      heroSlideIndex = (heroSlideIndex + 1) % cur.length;
+      cur[heroSlideIndex].classList.add('active');
     }, 6000);
-  })();
+  }
+  startHeroCarousel();
 
   /* --- Google Translate --- */
   function googleTranslateElementInit(){
@@ -888,33 +981,154 @@
       return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
     });
   }
-  function renderGrid(id, photos){
-    var el = document.getElementById(id);
-    if(!el || !photos || !photos.length) return; // leave static fallback markup untouched
-    el.innerHTML = "";
-    photos.forEach(function(p){
-      var fig = document.createElement("figure");
-      if(p.tall) fig.className = "tall";
-      var img = document.createElement("img");
-      img.src = "bilder/" + encodeURIComponent(p.file) + "." + (p.ext || "jpg");
-      img.alt = p.desc || "Villa Alsvik";
-      img.loading = "lazy";
-      var cap = document.createElement("figcaption");
-      cap.textContent = p.desc || "";
-      fig.appendChild(img);
-      fig.appendChild(cap);
-      el.appendChild(fig);
+  /* --- Cover-collage + lightbox gallery --- */
+  var COVER_LIMIT = 6;
+  var SECTIONS = [
+    { key: "garden", gridId: "gardenGrid", rooms: ["Exterior & garden","Surroundings"] },
+    { key: "living", gridId: "livingGrid", rooms: ["Living areas"] },
+    { key: "dining", gridId: "diningGrid", rooms: ["Kitchen & dining"] },
+    { key: "sleeping", gridId: "sleepingGrid", rooms: ["Bedrooms"] },
+    { key: "amenities", gridId: "amenitiesGrid", rooms: ["Amenities"] }
+  ];
+  var galleryData = {};
+  SECTIONS.forEach(function(s){ galleryData[s.key] = []; });
+  var lb, lbImg, lbCap, lbCount, curSection = null, curIndex = 0;
+
+  function readFromDOM(gridId){
+    var el = document.getElementById(gridId);
+    if(!el) return [];
+    return Array.prototype.map.call(el.querySelectorAll("figure"), function(fig){
+      var img = fig.querySelector("img");
+      var cap = fig.querySelector("figcaption");
+      return {
+        src: img ? img.getAttribute("src") : "",
+        alt: img ? img.getAttribute("alt") : "",
+        caption: cap ? cap.textContent : ""
+      };
     });
   }
+
+  function makeTile(p, onClick){
+    var fig = document.createElement("figure");
+    fig.className = "collage-tile";
+    fig.style.flexGrow = "1.4";
+    var img = document.createElement("img");
+    img.alt = p.alt || ""; img.loading = "lazy";
+    img.addEventListener("load", function(){
+      if(img.naturalWidth && img.naturalHeight){
+        fig.style.flexGrow = String(img.naturalWidth / img.naturalHeight);
+      }
+    });
+    img.src = p.src;
+    var cap = document.createElement("figcaption");
+    cap.textContent = p.caption || "";
+    fig.appendChild(img);
+    fig.appendChild(cap);
+    fig.addEventListener("click", onClick);
+    return fig;
+  }
+
+  function renderCoverGrid(gridId, section, photos){
+    var el = document.getElementById(gridId);
+    if(!el || !photos || !photos.length) return;
+    el.innerHTML = "";
+    var shown = photos.slice(0, COVER_LIMIT);
+    var row1 = document.createElement("div");
+    row1.className = "collage-row";
+    var row2 = document.createElement("div");
+    row2.className = "collage-row";
+    shown.forEach(function(p, i){
+      var tile = makeTile(p, function(){ openLightbox(section, i); });
+      (i < 3 ? row1 : row2).appendChild(tile);
+    });
+    el.appendChild(row1);
+    if(shown.length > 3) el.appendChild(row2);
+    if(photos.length > COVER_LIMIT){
+      var more = document.createElement("button");
+      more.type = "button";
+      more.className = "collage-more";
+      more.textContent = "View all " + photos.length + " photos";
+      more.addEventListener("click", function(){ openLightbox(section, 0); });
+      el.appendChild(more);
+    }
+  }
+
+  function openLightbox(section, index){
+    curSection = section; curIndex = index;
+    lb.classList.add("open");
+    document.body.style.overflow = "hidden";
+    showLbCurrent();
+  }
+  function showLbCurrent(){
+    var arr = galleryData[curSection];
+    if(!arr || !arr.length) return;
+    var p = arr[curIndex];
+    lbImg.src = p.src; lbImg.alt = p.alt || "";
+    lbCap.textContent = p.caption || "";
+    lbCount.textContent = (curIndex + 1) + " / " + arr.length;
+  }
+  function lbStep(d){
+    var arr = galleryData[curSection];
+    if(!arr || !arr.length) return;
+    curIndex = (curIndex + d + arr.length) % arr.length;
+    showLbCurrent();
+  }
+  function closeLightbox(){
+    lb.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function initLightbox(){
+    lb = document.getElementById("lightbox");
+    lbImg = document.getElementById("lbImg");
+    lbCap = document.getElementById("lbCap");
+    lbCount = document.getElementById("lbCount");
+    if(!lb) return;
+    document.getElementById("lbClose").addEventListener("click", closeLightbox);
+    document.getElementById("lbPrev").addEventListener("click", function(){ lbStep(-1); });
+    document.getElementById("lbNext").addEventListener("click", function(){ lbStep(1); });
+    lb.addEventListener("click", function(e){ if(e.target === lb) closeLightbox(); });
+    document.addEventListener("keydown", function(e){
+      if(!lb.classList.contains("open")) return;
+      if(e.key === "Escape") closeLightbox();
+      else if(e.key === "ArrowRight") lbStep(1);
+      else if(e.key === "ArrowLeft") lbStep(-1);
+    });
+  }
+
   function hydrateGallery(d){
     if(!d || !Array.isArray(d.galleryPhotos)) return;
     var shown = d.galleryPhotos.filter(function(p){ return p.show !== false; });
-    var gardenRooms = ["Exterior & garden","Surroundings"];
-    var interiorRooms = ["Living areas","Kitchen & dining","Bedrooms"];
-    var gardenPhotos = shown.filter(function(p){ return gardenRooms.indexOf(p.room) !== -1; });
-    var interiorPhotos = shown.filter(function(p){ return interiorRooms.indexOf(p.room) !== -1; });
-    renderGrid("gardenGrid", gardenPhotos);
-    renderGrid("interiorGrid", interiorPhotos);
+    var mapPhoto = function(p){
+      return {
+        src: "bilder/" + encodeURIComponent(p.file) + "." + (p.ext || "jpg"),
+        alt: p.desc || "Villa Alsvik",
+        caption: p.desc || ""
+      };
+    };
+    SECTIONS.forEach(function(s){
+      var photos = shown.filter(function(p){ return s.rooms.indexOf(p.room) !== -1; }).map(mapPhoto);
+      if(photos.length){ galleryData[s.key] = photos; renderCoverGrid(s.gridId, s.key, photos); }
+    });
+    var heroFiles = Array.isArray(d.heroPhotos) ? d.heroPhotos : [];
+    var byFile = {};
+    d.galleryPhotos.forEach(function(p){ byFile[p.file] = p; });
+    var heroPhotos = heroFiles.map(function(f){ return byFile[f]; }).filter(function(p){ return p && p.show !== false; });
+    if(heroPhotos.length){
+      var heroEl = document.getElementById("hero");
+      if(heroEl){
+        Array.prototype.slice.call(heroEl.querySelectorAll(".hero-slide")).forEach(function(s){ s.remove(); });
+        var frag = document.createDocumentFragment();
+        heroPhotos.forEach(function(p){
+          var div = document.createElement("div");
+          div.className = "hero-slide";
+          div.style.backgroundImage = "url('bilder/" + encodeURIComponent(p.file) + "." + (p.ext || "jpg") + "')";
+          frag.appendChild(div);
+        });
+        heroEl.insertBefore(frag, heroEl.firstChild);
+        startHeroCarousel();
+      }
+    }
     if(d.booking && d.booking.iframeUrl){
       var fr = document.getElementById("booking-iframe");
       if(fr && fr.src !== d.booking.iframeUrl) fr.src = d.booking.iframeUrl;
@@ -936,6 +1150,12 @@
       }).catch(function(){});
     }catch(e){}
   }
+  initLightbox();
+  SECTIONS.forEach(function(s){
+    galleryData[s.key] = readFromDOM(s.gridId);
+    renderCoverGrid(s.gridId, s.key, galleryData[s.key]);
+  });
+
   loadData();
   setTimeout(trackView, 1500);
 

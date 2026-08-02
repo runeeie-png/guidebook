@@ -723,20 +723,65 @@ function renderGallery(){
   if(!villaData) return;
   villaData.galleryPhotos = villaData.galleryPhotos || [];
   villaData.galleryRooms = villaData.galleryRooms || [];
+  villaData.heroPhotos = villaData.heroPhotos || [];
+  if(villaData.galleryRooms.indexOf("Amenities") < 0) villaData.galleryRooms.push("Amenities");
+  // Drop any stale references to files that no longer exist in galleryPhotos
+  var knownFiles = {};
+  villaData.galleryPhotos.forEach(function(p){ knownFiles[p.file] = true; });
+  villaData.heroPhotos = villaData.heroPhotos.filter(function(f){ return knownFiles[f]; });
 
   var top = el("div", { class: "section" }, [
     el("h2", null, "Gallery photos"),
     el("p", { class: "help" },
-      "Drag-and-drop order with ▲ / ▼ buttons. Set room type and description. Toggle Show/Hide to publish or temporarily hide a photo. " +
+      "Photos are grouped by room below instead of one long list. Use ▲ / ▼ to reorder within a group — the first photos in each group are what visitors see first before clicking \"View all photos\". Toggle Show/Hide to publish or temporarily hide a photo. Use the ☆ star on any photo to add it to the Hero rotation at the top of this page — a photo can be in its room group AND in the Hero rotation at the same time. " +
       "To add new photos: upload the .jpg file (and an optional thumbnail named foo-t.jpg) to the bilder/ folder on GitHub. " +
       "After Vercel re-deploys (~30 sec), click '+ Refresh from folder' to see them here."
     )
   ]);
 
+  // ── Hero rotation ──
+  var heroBox = el("div", { class: "section" }, [
+    el("h2", null, "Hero rotation"),
+    el("p", { class: "help" }, "The photos that rotate in the big banner at the top of the homepage. Star any photo below to add it here — order (▲ / ▼) is the rotation order."),
+  ]);
+  if(!villaData.heroPhotos.length){
+    heroBox.appendChild(el("p", { class: "help" }, "No photos selected yet — click the ☆ on any photo below to add it."));
+  }
+  villaData.heroPhotos.forEach(function(file, pos){
+    var p = null;
+    for(var k=0;k<villaData.galleryPhotos.length;k++){ if(villaData.galleryPhotos[k].file === file){ p = villaData.galleryPhotos[k]; break; } }
+    if(!p) return;
+    var row = el("div", { class: "photo-row" });
+    var img = el("img", { src: "/bilder/" + encodeURIComponent(p.file + "-t") + "." + (p.ext||"jpg") });
+    img.onerror = function(){ img.src = "/bilder/" + encodeURIComponent(p.file) + "." + (p.ext||"jpg"); };
+    row.appendChild(img);
+    row.appendChild(el("div", null, [ el("div", { class: "file" }, p.file + "." + (p.ext||"jpg")) ]));
+    var up = el("button", { onclick: function(){
+      if(pos === 0) return;
+      var t = villaData.heroPhotos[pos-1];
+      villaData.heroPhotos[pos-1] = villaData.heroPhotos[pos];
+      villaData.heroPhotos[pos] = t;
+      renderGallery(); setDirty(true);
+    }}, "▲");
+    var dn = el("button", { onclick: function(){
+      if(pos === villaData.heroPhotos.length-1) return;
+      var t = villaData.heroPhotos[pos+1];
+      villaData.heroPhotos[pos+1] = villaData.heroPhotos[pos];
+      villaData.heroPhotos[pos] = t;
+      renderGallery(); setDirty(true);
+    }}, "▼");
+    var rm = el("button", { onclick: function(){
+      villaData.heroPhotos.splice(pos,1);
+      renderGallery(); setDirty(true);
+    }}, "✕");
+    row.appendChild(el("div", { class: "order" }, [up, dn, rm]));
+    heroBox.appendChild(row);
+  });
+
   // Room types editor
   var roomsBox = el("div", { class: "section" }, [
     el("h2", null, "Room categories"),
-    el("p", { class: "help" }, "The filter buttons shown above the gallery grid. Order matters. Leave empty if a category isn't used by any photo."),
+    el("p", { class: "help" }, "Groups the photos below into sections shown on the site. Leave a category empty if no photos use it yet."),
   ]);
   var roomsArea = el("textarea", null, villaData.galleryRooms.join("\n"));
   roomsArea.style.cssText = "width:100%;min-height:120px;border:1px solid var(--line);padding:10px;border-radius:4px;background:#fafaf8;font-family:inherit;font-size:13px";
@@ -788,11 +833,36 @@ function renderGallery(){
   }, "+ Refresh from folder");
   photosBox.appendChild(refreshBtn);
 
+  // Group photos by room, keeping each photo's absolute index in villaData.galleryPhotos
+  var groups = {};
+  villaData.galleryRooms.forEach(function(r){ groups[r] = []; });
+  var other = [];
   villaData.galleryPhotos.forEach(function(p, i){
+    var r = p.room;
+    if(r && groups[r]) groups[r].push({ p: p, i: i });
+    else other.push({ p: p, i: i });
+  });
+
+  function buildRow(entry, list, listPos){
+    var p = entry.p, absIndex = entry.i;
     var row = el("div", { class: "photo-row" });
+    var thumbWrap = el("div", { style: "position:relative" });
     var img = el("img", { src: "/bilder/" + encodeURIComponent(p.file + "-t") + "." + (p.ext||"jpg") });
     img.onerror = function(){ img.src = "/bilder/" + encodeURIComponent(p.file) + "." + (p.ext||"jpg"); };
-    row.appendChild(img);
+    thumbWrap.appendChild(img);
+    var isHero = villaData.heroPhotos.indexOf(p.file) >= 0;
+    var star = el("button", {
+      title: isHero ? "Remove from Hero rotation" : "Add to Hero rotation",
+      style: "position:absolute;top:2px;left:2px;background:rgba(20,20,18,0.55);border:none;border-radius:50%;width:22px;height:22px;line-height:22px;padding:0;cursor:pointer;color:" + (isHero ? "#F2C744" : "#fff") + ";font-size:14px;",
+      onclick: function(){
+        var idx = villaData.heroPhotos.indexOf(p.file);
+        if(idx >= 0) villaData.heroPhotos.splice(idx,1);
+        else villaData.heroPhotos.push(p.file);
+        renderGallery(); setDirty(true);
+      }
+    }, isHero ? "★" : "☆");
+    thumbWrap.appendChild(star);
+    row.appendChild(thumbWrap);
 
     var mid = el("div", null, [
       el("div", { class: "file" }, p.file + "." + (p.ext||"jpg")),
@@ -818,6 +888,7 @@ function renderGallery(){
         renderGallery(); setDirty(true);
       } else {
         p.room = sel.value; setDirty(true);
+        renderGallery();
       }
     };
     row.appendChild(sel);
@@ -832,31 +903,54 @@ function renderGallery(){
     };
     row.appendChild(sh);
 
-    // Order
+    // Order — swap within this room's group only, translated to absolute array positions
     var up = el("button", { onclick: function(){
-      if(i===0) return;
-      var t = villaData.galleryPhotos[i-1];
-      villaData.galleryPhotos[i-1] = p;
-      villaData.galleryPhotos[i] = t;
+      if(listPos === 0) return;
+      var otherEntry = list[listPos - 1];
+      var t = villaData.galleryPhotos[otherEntry.i];
+      villaData.galleryPhotos[otherEntry.i] = villaData.galleryPhotos[absIndex];
+      villaData.galleryPhotos[absIndex] = t;
       renderGallery(); setDirty(true);
     }}, "▲");
     var dn = el("button", { onclick: function(){
-      if(i===villaData.galleryPhotos.length-1) return;
-      var t = villaData.galleryPhotos[i+1];
-      villaData.galleryPhotos[i+1] = p;
-      villaData.galleryPhotos[i] = t;
+      if(listPos === list.length - 1) return;
+      var otherEntry = list[listPos + 1];
+      var t = villaData.galleryPhotos[otherEntry.i];
+      villaData.galleryPhotos[otherEntry.i] = villaData.galleryPhotos[absIndex];
+      villaData.galleryPhotos[absIndex] = t;
       renderGallery(); setDirty(true);
     }}, "▼");
     var del = el("button", { onclick: function(){
       if(!confirm("Remove this photo from the gallery? (The file remains in bilder/, you can re-add later.)")) return;
-      villaData.galleryPhotos.splice(i,1); renderGallery(); setDirty(true);
+      var idx = villaData.heroPhotos.indexOf(p.file);
+      if(idx >= 0) villaData.heroPhotos.splice(idx,1);
+      villaData.galleryPhotos.splice(absIndex,1); renderGallery(); setDirty(true);
     }}, "✕");
     row.appendChild(el("div", { class: "order" }, [up, dn, del]));
+    return row;
+  }
 
-    photosBox.appendChild(row);
+  function renderGroup(title, list){
+    var box = el("div", { class: "section" });
+    box.appendChild(el("h3", null, title + " (" + list.length + ")"));
+    if(!list.length){
+      box.appendChild(el("p", { class: "help" }, "No photos assigned yet."));
+    }
+    list.forEach(function(entry, pos){
+      box.appendChild(buildRow(entry, list, pos));
+    });
+    return box;
+  }
+
+  villaData.galleryRooms.forEach(function(r){
+    photosBox.appendChild(renderGroup(r, groups[r]));
   });
+  if(other.length){
+    photosBox.appendChild(renderGroup("Unassigned", other));
+  }
 
   pane.appendChild(top);
+  pane.appendChild(heroBox);
   pane.appendChild(roomsBox);
   pane.appendChild(photosBox);
 }
