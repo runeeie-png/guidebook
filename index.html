@@ -384,19 +384,18 @@
 
   /* ---------- FEATURES ---------- */
   .features{
-    border-top:1px solid var(--ivory-warm);
-    border-bottom:1px solid var(--ivory-warm);
+    background:var(--olive);
     padding:56px 0;
   }
   .features .container{
     display:grid; grid-template-columns:repeat(4,1fr); gap:20px; text-align:center;
   }
-  .feature svg{width:30px; height:30px; margin-bottom:16px; stroke:var(--olive); fill:none; stroke-width:1.2;}
+  .feature svg{width:30px; height:30px; margin-bottom:16px; stroke:var(--ivory); fill:none; stroke-width:1.2;}
   .feature h3{
     font-family:'Jost', sans-serif; font-size:13px; letter-spacing:0.14em;
-    text-transform:uppercase; font-weight:200; color:var(--olive-dark); margin-bottom:8px;
+    text-transform:uppercase; font-weight:200; color:var(--ivory); margin-bottom:8px;
   }
-  .feature p{font-size:13.5px; color:#6E6E6A;}
+  .feature p{font-size:13.5px; color:rgba(246,243,238,0.72);}
 
   /* ---------- GALLERIER ---------- */
   .gallery-section{padding:100px 0; background:var(--ivory);}
@@ -606,9 +605,9 @@
     .header-logo{font-size:19px;}
     .header-logo .logo-word{font-size:11px; letter-spacing:0.2em;}
     .retreat h2, .gallery-section h2, .book-cta h2, .reviews h2{font-size:24px;}
-    .retreat-media{grid-template-columns:1fr;}
-    .retreat-media .main-img{grid-row:auto; min-height:260px;}
-    .retreat-media .sub-img{min-height:180px;}
+    .retreat-media{gap:10px;}
+    .retreat-media .main-img{min-height:240px;}
+    .retreat-media .sub-img{min-height:115px;}
     .features .container{grid-template-columns:1fr;}
     .gallery-grid{grid-template-columns:1fr;}
     .discount-badge{flex-direction:column; gap:4px; text-align:center;}
