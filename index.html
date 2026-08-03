@@ -1064,7 +1064,7 @@
       more.type = "button";
       more.className = "collage-more";
       more.textContent = "View all " + photos.length + " photos";
-      more.addEventListener("click", function(){ openLightbox(section, 0); });
+      more.addEventListener("click", function(){ expandCoverGrid(gridId, section, photos, shown.length, more); });
       el.appendChild(more);
     }
   }
@@ -1092,6 +1092,24 @@
   function closeLightbox(){
     lb.classList.remove("open");
     document.body.style.overflow = "";
+  }
+
+  function expandCoverGrid(gridId, section, allPhotos, alreadyShown, moreBtn){
+    var el = document.getElementById(gridId);
+    if(!el) return;
+    var rest = allPhotos.slice(alreadyShown);
+    var row = null;
+    rest.forEach(function(p, i){
+      var idx = alreadyShown + i;
+      if(i % 3 === 0){
+        row = document.createElement("div");
+        row.className = "collage-row";
+        el.insertBefore(row, moreBtn);
+      }
+      var tile = makeTile(p, function(){ openLightbox(section, idx); });
+      row.appendChild(tile);
+    });
+    moreBtn.remove();
   }
 
   function initLightbox(){
