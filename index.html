@@ -307,6 +307,7 @@
     transition:opacity 2.2s ease-in-out;
   }
   .hero-slide.active{opacity:1;}
+  @media (min-width:701px){ .hero-slide{ background-position: var(--hero-pos, 0% 0%); } }
   .hero-slide.s1{background-image:url('bilder/alsvik-6541.jpg'); background-position:center 45%;}
   .hero-slide.s2{background-image:url('bilder/alsvik-6481.jpg'); background-position:center 42%;}
   .hero-slide.s3{background-image:url('bilder/alsvik-4051.jpg'); background-position:center 50%;}
@@ -359,7 +360,7 @@
   .retreat{padding:110px 0;}
   .retreat .container{
     display:grid;
-    grid-template-columns:0.9fr 1.1fr;
+    grid-template-columns:0.8fr 1.2fr;
     gap:64px;
     align-items:center;
   }
@@ -373,12 +374,12 @@
     margin-bottom:22px; letter-spacing:0.03em;
   }
   .retreat p{font-size:15.5px; color:#5C5C59; margin-bottom:30px; max-width:440px;}
-  .retreat-media{display:grid; grid-template-columns:1.4fr 1fr; gap:14px;}
+  .retreat-media{display:grid; grid-template-columns:1.3fr 1.15fr; gap:14px;}
   .retreat-media .main-img{
-    grid-row:span 2; min-height:400px;
+    grid-row:span 2; min-height:456px;
     background-size:cover; background-position:center;
   }
-  .retreat-media .sub-img{min-height:193px; background-size:cover; background-position:center;}
+  .retreat-media .sub-img{min-height:221px; background-size:cover; background-position:center;}
 
   /* ---------- FEATURES ---------- */
   .features{
@@ -1123,6 +1124,8 @@
           var div = document.createElement("div");
           div.className = "hero-slide";
           div.style.backgroundImage = "url('bilder/" + encodeURIComponent(p.file) + "." + (p.ext || "jpg") + "')";
+          var heroPosOverrides = {"alsvik-6541":"center 62%"};
+          if(heroPosOverrides[p.file]) div.style.setProperty("--hero-pos", heroPosOverrides[p.file]);
           frag.appendChild(div);
         });
         heroEl.insertBefore(frag, heroEl.firstChild);
