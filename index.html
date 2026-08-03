@@ -308,6 +308,7 @@
   }
   .hero-slide.active{opacity:1;}
   @media (min-width:701px){ .hero-slide{ background-position: var(--hero-pos, 0% 0%); } }
+  @media (max-width:700px){ .hero-slide{ background-position: var(--hero-pos-mobile, 0% 0%); } }
   .hero-slide.s1{background-image:url('bilder/alsvik-6541.jpg'); background-position:center 45%;}
   .hero-slide.s2{background-image:url('bilder/alsvik-6481.jpg'); background-position:center 42%;}
   .hero-slide.s3{background-image:url('bilder/alsvik-4051.jpg'); background-position:center 50%;}
@@ -1126,6 +1127,8 @@
           div.style.backgroundImage = "url('bilder/" + encodeURIComponent(p.file) + "." + (p.ext || "jpg") + "')";
           var heroPosOverrides = {"alsvik-6541":"center 62%"};
           if(heroPosOverrides[p.file]) div.style.setProperty("--hero-pos", heroPosOverrides[p.file]);
+          var heroPosOverridesMobile = {"alsvik-4051":"70% 0%"};
+          if(heroPosOverridesMobile[p.file]) div.style.setProperty("--hero-pos-mobile", heroPosOverridesMobile[p.file]);
           frag.appendChild(div);
         });
         heroEl.insertBefore(frag, heroEl.firstChild);
